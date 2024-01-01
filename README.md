@@ -1,17 +1,5 @@
 <!-- Hey there! 👋 -->
-
-
-######   ######    ######  ##   ##   ######  #####      ###      ####   
- ##  ##   ##  ##     ##    ### ###     ##     ## ##    ## ##    ##  ##  
- ##  ##   ##  ##     ##    #######     ##     ##  ##  ##   ##  ##       
- #####    #####      ##    ## # ##     ##     ##  ##  ##   ##  ##       
- ##       ## ##      ##    ##   ##     ##     ##  ##  #######  ##       
- ##       ## ##      ##    ##   ##     ##     ## ##   ##   ##   ##  ##  
-####     #### ##   ######  ### ###   ######  #####    ##   ##    ####   
                                                                         
-
-
-
 # Hello, World! 🌍✨
 
 I'm Primidac, a passionate software developer on a mission since 2015 to reshape the tech landscape in Africa. 🚀 My code is my tool to rebuild, innovate, and create a brighter future for Africa.
