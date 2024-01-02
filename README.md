@@ -9,7 +9,7 @@ I'm Primidac, a passionate software developer on a mission since 2015 to reshape
 - **Languages**: Python, Rust, Javascript
 - **Frameworks**: Django, Next.js, FastAPI, Flask, embedded-hal, rtic, msp430, riscv
 - **Databases**: Prisma, MongoDB, Firebase, MySQL
-- **Mobile Dev**: Dart, Flutter
+- **Mobile Dev**: React Native
 - **Ops & Tools**: Linux, Docker
 
 ## 🚀 Current Ventures
