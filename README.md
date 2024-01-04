@@ -1,22 +1,51 @@
-<!-- Hey there! 👋 -->
-                                                                        
-# Hello, World! 🌍✨
-
-I'm Primidac, a passionate software developer on a mission since 2015 to reshape the tech landscape in Africa. 🚀 My code is my tool to rebuild, innovate, and create a brighter future for Africa.
-
 ## 🛠️ Tech Toolbox
 
-- **Languages**: Python, Rust, Javascript
-- **Frameworks**: Django, Next.js, Reactjs, FastAPI, Flask, embedded-hal, rtic, msp430, riscv
-- **Databases**: Prisma, MongoDB, Firebase, MySQL
-- **Mobile Dev**: React Native
-- **Ops & Tools**: Linux, Docker
+### Languages
+
+- **Proficient**: Python, Rust, JavaScript
+- **Familiar**: TypeScript, C/C++
+
+### Frameworks
+
+- **Web Development**: Django, Next.js, React.js, FastAPI, Flask
+- **Embedded Systems**: embedded-hal, rtic, msp430, riscv
+
+### Databases
+
+- **Relational**: MySQL, PostgreSQL
+- **NoSQL**: MongoDB, Firebase
+- **ORM**: Prisma
+
+### Mobile Development
+
+- React Native
+
+### Tools & DevOps
+
+- **Operating System**: Linux (Ubuntu, Fedora, Kali)
+- **Containerization**: Docker
+- **Continuous Integration**: GitHub Actions, Travis CI
+- **Version Control**: Git
+- **Collaboration**: Slack, Microsoft Teams
+
+### Cloud Platforms
+
+- Amazon Web Services (AWS)
+- Google Cloud Platform (GCP)
+- Firebase
+
+### Other Skills
+
+- RESTful API Design
+- Microservices Architecture
+- GraphQL
+- Cybersecurity 
 
 ## 🚀 Current Ventures
 
 🌐 **Embedded Systems & Cybersecurity Explorer**: Crafting secure and efficient solutions for the digital challenges of tomorrow.
 
-📱 **Mobile App & Web Developer**: Turning ideas into delightful user experiences. 
+📱 **Mobile App & Web Developer**: Turning ideas into delightful user experiences.
 
 🌍 **Startups Enthusiast**: Currently steering two exciting projects, geared towards making a difference in the African market.
 
@@ -24,9 +53,9 @@ I'm Primidac, a passionate software developer on a mission since 2015 to reshape
 
 - Twitter: [@primidac](https://twitter.com/primidac)
 - Instagram: [Primidac](https://instagram.com/pri.midac)
+- LinkedIn: [Primidac](https://www.linkedin.com/in/primidac/)
 - Website: [primidac.com](https://primidac.com)
 
 ## 🎨 Let's Code with Colors!
 
-Feel free to explore my repos, and let's add some hues to the world of code! 🎨✨
-
+Feel free to reach out to me for collaboration, let's add some hues to the world of code! 🎨✨
