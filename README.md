@@ -1,61 +1,61 @@
-## 🛠️ Tech Toolbox
+## 🛠️ Tech Toolbox 🎮💻
 
-### Languages
+### Languages 🚀
 
 - **Proficient**: Python, Rust, JavaScript
 - **Familiar**: TypeScript, C/C++
 
-### Frameworks
+### Frameworks 🌐
 
-- **Web Development**: Django, Next.js, React.js, FastAPI, Flask
-- **Embedded Systems**: embedded-hal, rtic, msp430, riscv
+- **Web Dev**: Django, Next.js, React.js, FastAPI, Flask
+- **Embedded Magic**: embedded-hal, rtic, msp430, riscv
 
-### Databases
+### Databases 📊
 
-- **Relational**: MySQL, PostgreSQL
-- **NoSQL**: MongoDB, Firebase
-- **ORM**: Prisma
+- **SQL Sorcerer**: MySQL, PostgreSQL
+- **NoSQL Wizardry**: MongoDB, Firebase
+- **ORM Maestro**: Prisma
 
-### Mobile Development
+### Mobile Marvels 📱
 
 - React Native
 
-### Tools & DevOps
+### Tools & DevOps 🔧
 
-- **Operating System**: Linux (Ubuntu, Fedora, Kali)
-- **Containerization**: Docker
-- **Continuous Integration**: GitHub Actions, Travis CI
-- **Version Control**: Git
-- **Collaboration**: Slack, Microsoft Teams
+- **OS Adventures**: Linux (Ubuntu, Fedora, Kali)
+- **Container Enchantments**: Docker
+- **CI/CD Spells**: GitHub Actions, Travis CI
+- **Git Sorcery**: Git
+- **Collaboration Charms**: Slack, Microsoft Teams
 
-### Cloud Platforms
+### Cloud Kingdoms ☁️
 
 - Amazon Web Services (AWS)
 - Google Cloud Platform (GCP)
 - Firebase
 
-### Other Skills
+### Other Spells ✨
 
-- RESTful API Design
-- Microservices Architecture
-- GraphQL
-- Cybersecurity 
+- RESTful API Wizardry
+- Microservices Alchemy
+- GraphQL Sorcery
+- Cybersecurity Enchantments
 
-## 🚀 Current Ventures
+## 🚀 Current Ventures 🚀
 
-🌐 **Embedded Systems & Cybersecurity Explorer**: Crafting secure and efficient solutions for the digital challenges of tomorrow.
+🌐 **Digital Wizard & Cyber Sorcerer**: Crafting secure and efficient solutions for the digital challenges of tomorrow.
 
-📱 **Mobile App & Web Developer**: Turning ideas into delightful user experiences.
+📱 **Mobile App Magician & Web Wizard**: Turning ideas into delightful user experiences.
 
-🌍 **Startups Enthusiast**: Currently steering two exciting projects, geared towards making a difference in the African market.
+🌍 **Startups Enchanter**: Currently steering two magical projects, geared towards making a difference in the African market.
 
-## 🌈 Let's Connect!
+## 🌈 Let's Connect! 🚀
 
 - Twitter: [@primidac](https://twitter.com/primidac)
 - Instagram: [Primidac](https://instagram.com/pri.midac)
 - LinkedIn: [Primidac](https://www.linkedin.com/in/primidac/)
 - Website: [primidac.com](https://primidac.com)
 
-## 🎨 Let's Code with Colors!
+## 🎨 Let's Code with Colors! 🎨
 
-Feel free to reach out to me for collaboration, let's add some hues to the world of code! 🎨✨
+Feel free to slide into my DMs for a coding collaboration, let's sprinkle some magic to the world of code! ✨🦄
