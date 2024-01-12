@@ -13,7 +13,7 @@
 ### Databases 📊
 
 - **SQL Sorcerer**: MySQL, PostgreSQL
-- **NoSQL Wizardry**: MongoDB, Firebase
+- **NoSQL Wizardry**: MongoDB, Firebase, Supabase
 - **ORM Maestro**: Prisma
 
 ### Mobile Marvels 📱
