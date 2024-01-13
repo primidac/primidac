@@ -3,7 +3,7 @@
 ### Languages 🚀
 
 - **Proficient**: Python, Rust, JavaScript
-- **Familiar**: TypeScript, C/C++, Ruby, Java, C#, Perl, lua
+- **Familiar**: TypeScript, C/C++, Ruby, Java, C#, Perl
 
 ### Frameworks 🌐
 
