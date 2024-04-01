@@ -19,6 +19,7 @@
 ### Mobile Marvels 📱
 
 - React Native
+- Flutter
 
 ### Tools & DevOps 🔧
 
