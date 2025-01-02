@@ -3,12 +3,12 @@
 ### Languages 🚀
 
 - **Proficient**: Python, Rust, JavaScript
-- **Familiar**: TypeScript, C/C++, Ruby, Java, C#, Perl
+
 
 ### Frameworks 🌐
 
 - **Web Dev**: Django, Next.js, React.js, FastAPI, Flask
-- **Embedded Magic**: embedded-hal, rtic, msp430, riscv
+
 
 ### Databases 📊
 
@@ -25,7 +25,6 @@
 
 - **OS Adventures**: Linux (Ubuntu, Fedora, Kali)
 - **Container Enchantments**: Docker
-- **CI/CD Spells**: GitHub Actions, Travis CI
 - **Git Sorcery**: Git
 - **Collaboration Charms**: Slack, Microsoft Teams
 
