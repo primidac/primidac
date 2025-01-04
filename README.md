@@ -2,12 +2,12 @@
 
 ### Languages 🚀
 
-- **Proficient**: Python, Rust, JavaScript
+- **Proficient**: Python, Rust, JavaScript, Dart
 
 
 ### Frameworks 🌐
 
-- **Web Dev**: Django, Next.js, React.js, FastAPI, Flask
+- **Web Dev**: Next.js, React.js, FastAPI, Flask
 
 
 ### Databases 📊
@@ -32,7 +32,7 @@
 
 - Amazon Web Services (AWS)
 - Google Cloud Platform (GCP)
-- Firebase
+
 
 ### Other Spells ✨
 
