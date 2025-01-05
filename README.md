@@ -24,7 +24,6 @@
 ### Tools & DevOps 🔧
 
 - **OS Adventures**: Linux (Ubuntu, Fedora, Kali)
-- **Container Enchantments**: Docker
 - **Git Sorcery**: Git
 - **Collaboration Charms**: Slack, Microsoft Teams
 
