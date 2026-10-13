@@ -1,0 +1,44 @@
+---
+interface Props {
+  variant?: 'primary' | 'secondary' | 'ghost' | 'text';
+  size?: 'sm' | 'md' | 'lg';
+  href?: string;
+  disabled?: boolean;
+  type?: 'button' | 'submit' | 'reset';
+  class?: string;
+}
+
+const {
+  variant = 'primary',
+  size = 'md',
+  href,
+  disabled = false,
+  type = 'button',
+  class: className,
+} = Astro.props;
+
+const variantClass = {
+  primary: 'btn-primary',
+  secondary: 'btn-secondary',
+  ghost: 'btn-ghost',
+  text: 'btn-text',
+}[variant];
+
+const sizeClass = {
+  sm: 'text-xs px-3.5 py-1.5',
+  md: '',
+  lg: 'text-base px-6 py-3',
+}[size];
+
+const Tag = href ? 'a' : 'button';
+---
+
+<Tag
+  href={href}
+  type={!href ? type : undefined}
+  disabled={!href ? disabled : undefined}
+  class:list={[variantClass, sizeClass, className]}
+  aria-disabled={disabled ? 'true' : undefined}
+>
+  <slot />
+</Tag>

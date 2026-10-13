@@ -1,0 +1,63 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection, type CollectionEntry } from 'astro:content';
+
+export async function getStaticPaths() {
+  const work = await getCollection('work');
+  return work.map(project => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+interface Props {
+  project: CollectionEntry<'work'>;
+}
+
+const { project } = Astro.props;
+const { Content } = await project.render();
+---
+
+<Layout title={`${project.data.title} — Primidac Technology`} description={project.data.description}>
+  <article class="page-container py-24 md:py-32 max-w-4xl">
+    <a href="/work" class="inline-flex items-center gap-2 text-mono-tech text-brand-primary hover:text-brand-deep mb-12">
+      &larr; Back to Work
+    </a>
+    
+    <div class="mb-16 border-b-layout pb-8">
+      <h1 class="text-display-hero text-neutral-900 mb-6">{project.data.title}</h1>
+      <p class="text-body-lg text-neutral-700 mb-8">{project.data.description}</p>
+      
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-sm">
+        <div>
+          <strong class="block text-neutral-900 mb-1">Role</strong>
+          <span class="text-neutral-600">{project.data.role}</span>
+        </div>
+        <div>
+          <strong class="block text-neutral-900 mb-1">Year</strong>
+          <span class="text-neutral-600">{project.data.year}</span>
+        </div>
+        {project.data.technologies && (
+          <div class="col-span-2">
+            <strong class="block text-neutral-900 mb-1">Technology</strong>
+            <span class="text-neutral-600">{project.data.technologies.join(', ')}</span>
+          </div>
+        )}
+      </div>
+    </div>
+
+    <div class="prose prose-neutral max-w-none prose-headings:font-sans prose-headings:font-bold prose-h2:text-3xl prose-h3:text-2xl prose-a:text-brand-primary hover:prose-a:text-brand-deep">
+      <Content />
+    </div>
+
+    <section class="mt-24 border-t-layout pt-16">
+      <div class="bg-white p-8 border-layout flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
+        <div>
+          <h3 class="text-heading-md mb-2">Have a problem worth solving?</h3>
+          <p class="text-body-sm text-neutral-600">Let's discuss if we can build a solution for your business.</p>
+        </div>
+        <a href="/contact" class="btn-secondary whitespace-nowrap">Start a conversation</a>
+      </div>
+    </section>
+  </article>
+</Layout>

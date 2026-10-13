@@ -1,0 +1,175 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../../lib/firebase";
+import { marked } from "marked";
+
+export async function getStaticPaths() {
+  const snapshot = await getDocs(collection(db, "insights"));
+  return snapshot.docs.map((doc) => {
+    return {
+      params: { slug: doc.data().slug },
+      props: { article: doc.data() },
+    };
+  });
+}
+
+const { article } = Astro.props;
+const parsedContent = marked.parse(article.content || "");
+
+let date = "Just now";
+if (article.createdAt) {
+  try {
+    date = article.createdAt.toDate().toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  } catch (e) {
+    date = new Date(article.createdAt).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  }
+}
+---
+
+<Layout
+  title={`${article.title} — Primidac`}
+  description={article.excerpt || "Primidac Engineering Dispatch"}
+>
+  <div class="bg-paper min-h-screen w-full relative overflow-hidden">
+    <!-- Structured Dot Grid Background -->
+    <div
+      class="absolute inset-0 z-0 pointer-events-none opacity-20"
+      style="background-image: radial-gradient(var(--ink) 1px, transparent 1px); background-size: 24px 24px;"
+    >
+      <div
+        class="absolute inset-0 bg-gradient-to-b from-transparent via-paper/80 to-paper"
+      >
+      </div>
+    </div>
+
+    <!-- Progress Indicator -->
+    <div class="fixed top-20 left-0 w-full h-1 bg-surface-subtle z-40">
+      <div class="h-full bg-accent w-1/3" id="reading-progress"></div>
+    </div>
+
+    <!-- Article Hero -->
+    <header
+      class="relative z-10 pt-28 md:pt-40 pb-16 md:pb-20 px-6 md:px-12 max-w-[900px] mx-auto border-b border-hairline"
+    >
+      <div>
+        <div
+          class="flex items-center gap-4 text-xs font-mono uppercase tracking-wider text-muted mb-8"
+        >
+          <a
+            href="/writing"
+            class="hover:text-accent transition-colors flex items-center gap-1.5"
+          >
+            <span>&larr;</span> Writing
+          </a>
+          <span>/</span>
+          <span class="text-accent font-semibold"
+            >{article.category || "Uncategorized"}</span
+          >
+          <span class="hidden sm:inline">&bull;</span>
+          <span class="hidden sm:inline">{date}</span>
+          <span class="hidden sm:inline">&bull;</span>
+          <span class="hidden sm:inline">{article.readTime || 5} Min Read</span>
+        </div>
+
+        <h1
+          class="text-3xl sm:text-5xl md:text-6xl font-display font-semibold text-ink leading-tight mb-6"
+        >
+          {article.title}
+        </h1>
+
+        {article.excerpt && (
+          <p
+            class="text-lg md:text-xl text-ink/80 leading-relaxed font-sans max-w-3xl mb-8"
+          >
+            {article.excerpt}
+          </p>
+        )}
+
+        <!-- Author Block -->
+        <div
+          class="flex items-center gap-4 pt-6 border-t border-hairline max-w-md"
+        >
+          <div
+            class="w-10 h-10 bg-surface-subtle border-hairline rounded-full flex items-center justify-center text-ink font-mono text-sm font-bold"
+          >
+            P
+          </div>
+          <div>
+            <div class="font-display font-semibold text-ink text-sm">
+              {article.author || "Primidac"}
+            </div>
+            <div
+              class="font-mono text-[11px] text-muted mt-0.5"
+            >
+              {article.authorRole || "Product Engineer · Security & AI"}
+            </div>
+          </div>
+        </div>
+
+        <!-- Cover Image -->
+        {
+          (article.coverImage || article.image) && (
+            <div class="mt-12 w-full rounded-xl overflow-hidden border border-hairline bg-surface-subtle shadow-md">
+              <img
+                src={article.coverImage || article.image}
+                alt={article.title}
+                class="w-full h-auto object-cover max-h-[520px]"
+              />
+            </div>
+          )
+        }
+      </div>
+    </header>
+
+    <article
+      class="relative z-10 py-12 md:py-20 px-6 md:px-12 max-w-[800px] mx-auto prose"
+    >
+      <div set:html={parsedContent} />
+    </article>
+
+    <!-- Footer Navigation -->
+    <div class="border-t border-hairline bg-surface relative z-10 py-14">
+      <div
+        class="max-w-[900px] mx-auto px-6 md:px-12 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6"
+      >
+        <div>
+          <div class="font-mono text-xs text-accent font-semibold mb-1">// ARCHIVE</div>
+          <div class="font-display font-semibold text-xl text-ink">
+            Explore more notes & research.
+          </div>
+        </div>
+
+        <a href="/writing" class="btn-primary py-2.5 px-5 text-sm flex items-center gap-2">
+          <span>&larr;</span> All Technical Notes
+        </a>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  // Simple reading progress bar
+  document.addEventListener("DOMContentLoaded", () => {
+    const progressBar = document.getElementById("reading-progress");
+
+    window.addEventListener("scroll", () => {
+      if (!progressBar) return;
+      const winScroll =
+        document.body.scrollTop || document.documentElement.scrollTop;
+      const height =
+        document.documentElement.scrollHeight -
+        document.documentElement.clientHeight;
+      const scrolled = (winScroll / height) * 100;
+      progressBar.style.width = scrolled + "%";
+    });
+  });
+</script>

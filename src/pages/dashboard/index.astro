@@ -1,0 +1,106 @@
+---
+import DashboardLayout from '../../layouts/DashboardLayout.astro';
+import { blobatar } from 'blobatar';
+
+const bDataSync = blobatar('DataSync Pro');
+const bAutomator = blobatar('Automator');
+const bInsights = blobatar('Insights DB');
+const bCloud = blobatar('Cloud Connect');
+---
+
+<DashboardLayout title="Tools Marketplace">
+  <div class="p-6 sm:p-10 relative max-w-[1600px] mx-auto min-h-full flex flex-col">
+    
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-10 gap-6">
+      <div>
+        <h1 class="text-3xl text-neutral-900 font-bold mb-2 font-display">Tools Marketplace</h1>
+        <p class="text-neutral-600 text-sm max-w-lg leading-relaxed">
+          Discover and connect business tools to your workspace. Our platoon of tools operates independently but integrates seamlessly.
+        </p>
+      </div>
+      
+      <div class="w-full sm:w-auto flex items-center gap-3">
+        <div class="flex-1 sm:flex-none px-4 py-2.5 bg-white border border-neutral-200 rounded-lg text-sm text-neutral-600 flex items-center gap-3 shadow-sm">
+          <span class="i-lucide-search w-4 h-4 text-neutral-400"></span>
+          <input type="text" placeholder="Search tools..." class="bg-transparent border-none outline-none w-full sm:w-48 placeholder-neutral-400 text-neutral-900" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Marketplace Grid (Mock Data) -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 relative z-10">
+      
+      <!-- Tool 1: DataSync Pro -->
+      <div class="bg-white border border-brand-primary/40 shadow-[0_0_20px_rgba(27,80,249,0.08)] rounded-2xl p-6 flex flex-col transition-all duration-300 hover:-translate-y-1 hover:shadow-xl relative overflow-hidden group">
+        <div class="absolute inset-0 bg-gradient-to-br from-brand-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+        <div class="flex items-start justify-between mb-6 relative z-10">
+          <div class="w-14 h-14 rounded-xl overflow-hidden bg-white border border-neutral-100 shadow-sm flex items-center justify-center p-2" set:html={bDataSync}></div>
+          <div class="text-[10px] font-bold px-4 py-1.5 bg-neutral-100 text-neutral-400 rounded-full uppercase tracking-wide cursor-not-allowed">Installed</div>
+        </div>
+        <div class="text-lg text-neutral-900 font-bold mb-2 relative z-10">DataSync Pro</div>
+        <div class="text-sm text-neutral-600 leading-relaxed flex-1 relative z-10">Connects to your core systems to synchronize data seamlessly across platforms.</div>
+        
+        <div class="mt-6 pt-4 border-t border-neutral-100 flex items-center justify-between relative z-10">
+          <span class="text-[10px] font-mono text-emerald-600 uppercase tracking-widest flex items-center gap-2">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Active
+          </span>
+          <a href="#" class="text-xs font-bold text-brand-primary hover:text-brand-deep transition-colors">Configure &rarr;</a>
+        </div>
+      </div>
+
+      <!-- Tool 2: Automator -->
+      <div class="bg-white border border-neutral-200 shadow-sm rounded-2xl p-6 flex flex-col transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-brand-primary/20 relative overflow-hidden group">
+        <div class="absolute inset-0 bg-gradient-to-br from-neutral-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+        <div class="flex items-start justify-between mb-6 relative z-10">
+          <div class="w-14 h-14 rounded-xl overflow-hidden bg-white border border-neutral-100 shadow-sm flex items-center justify-center p-2" set:html={bAutomator}></div>
+          <button class="text-[10px] font-bold px-4 py-1.5 bg-neutral-900 text-white rounded-full uppercase tracking-wide hover:bg-brand-primary transition-colors hover:shadow-lg shadow-sm">Install</button>
+        </div>
+        <div class="text-lg text-neutral-900 font-bold mb-2 relative z-10">Automator</div>
+        <div class="text-sm text-neutral-600 leading-relaxed flex-1 relative z-10">Build complex conditional workflows to eliminate repetitive manual processes.</div>
+        
+        <div class="mt-6 pt-4 border-t border-neutral-100 flex items-center justify-between relative z-10">
+          <span class="text-[10px] font-mono text-neutral-400 uppercase tracking-widest">Workflow</span>
+          <span class="text-[10px] font-bold text-neutral-500 uppercase tracking-widest">Free</span>
+        </div>
+      </div>
+
+      <!-- Tool 3: Insights DB -->
+      <div class="bg-white border border-neutral-200 shadow-sm rounded-2xl p-6 flex flex-col transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-brand-primary/20 relative overflow-hidden group">
+        <div class="absolute inset-0 bg-gradient-to-br from-neutral-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+        <div class="flex items-start justify-between mb-6 relative z-10">
+          <div class="w-14 h-14 rounded-xl overflow-hidden bg-white border border-neutral-100 shadow-sm flex items-center justify-center p-2" set:html={bInsights}></div>
+          <button class="text-[10px] font-bold px-4 py-1.5 bg-neutral-900 text-white rounded-full uppercase tracking-wide hover:bg-brand-primary transition-colors hover:shadow-lg shadow-sm">Install</button>
+        </div>
+        <div class="text-lg text-neutral-900 font-bold mb-2 relative z-10">Insights DB</div>
+        <div class="text-sm text-neutral-600 leading-relaxed flex-1 relative z-10">Centralized analytics engine that aggregates operational data in real time.</div>
+        
+        <div class="mt-6 pt-4 border-t border-neutral-100 flex items-center justify-between relative z-10">
+          <span class="text-[10px] font-mono text-neutral-400 uppercase tracking-widest">Data</span>
+          <span class="text-[10px] font-bold text-neutral-500 uppercase tracking-widest">$49/mo</span>
+        </div>
+      </div>
+
+      <!-- Tool 4: Cloud Connect -->
+      <div class="bg-white border border-neutral-200 shadow-sm rounded-2xl p-6 flex flex-col transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-brand-primary/20 relative overflow-hidden group">
+        <div class="absolute inset-0 bg-gradient-to-br from-neutral-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+        <div class="flex items-start justify-between mb-6 relative z-10">
+          <div class="w-14 h-14 rounded-xl overflow-hidden bg-white border border-neutral-100 shadow-sm flex items-center justify-center p-2" set:html={bCloud}></div>
+          <button class="text-[10px] font-bold px-4 py-1.5 bg-neutral-900 text-white rounded-full uppercase tracking-wide hover:bg-brand-primary transition-colors hover:shadow-lg shadow-sm">Install</button>
+        </div>
+        <div class="text-lg text-neutral-900 font-bold mb-2 relative z-10">Cloud Connect</div>
+        <div class="text-sm text-neutral-600 leading-relaxed flex-1 relative z-10">Secure API gateway for managing external integrations safely.</div>
+        
+        <div class="mt-6 pt-4 border-t border-neutral-100 flex items-center justify-between relative z-10">
+          <span class="text-[10px] font-mono text-neutral-400 uppercase tracking-widest">Infrastructure</span>
+          <span class="text-[10px] font-bold text-neutral-500 uppercase tracking-widest">Enterprise</span>
+        </div>
+      </div>
+      
+    </div>
+
+    <!-- Fading bottom edge (from mock UI) -->
+    <div class="mt-auto pt-24 pb-8 flex justify-center pointer-events-none relative z-0">
+       <div class="w-full h-px bg-gradient-to-r from-transparent via-neutral-200 to-transparent"></div>
+    </div>
+  </div>
+</DashboardLayout>

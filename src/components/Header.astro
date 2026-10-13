@@ -1,0 +1,144 @@
+---
+import { siteConfig } from "../config/site";
+
+const currentPath = Astro.url.pathname;
+
+function isActive(href: string): boolean {
+  if (href === "/") return currentPath === "/";
+  if (href.startsWith("#")) return false;
+  return currentPath.startsWith(href);
+}
+---
+
+<header
+  id="site-header"
+  class="fixed top-0 left-0 right-0 z-50 border-b border-hairline bg-[var(--paper)]/90 backdrop-blur-md transition-all duration-200"
+>
+  <div
+    class="max-w-[76rem] mx-auto h-[68px] px-5 sm:px-8 lg:px-12 flex items-center justify-between"
+  >
+    <!-- Left: Brand Logo Mark -->
+    <a href="/" class="group flex items-center gap-2.5 text-ink" aria-label="Primidac Home">
+      <span class="w-7 h-7 rounded-[7px] bg-accent text-[#161616] font-display font-black text-sm flex items-center justify-center transition-transform group-hover:scale-105">
+        P
+      </span>
+      <span class="font-display font-semibold text-[17px] tracking-tight">
+        primidac<span class="text-accent">.</span>
+      </span>
+    </a>
+
+    <!-- Center: Desktop Navigation -->
+    <nav
+      class="hidden md:flex items-center gap-8"
+      aria-label="Main navigation"
+    >
+      {
+        siteConfig.nav.map((item) => {
+          const active = isActive(item.href);
+
+          return (
+            <a
+              href={item.href}
+              class:list={[
+                "text-[13px] font-mono tracking-wider transition-colors py-1",
+                active
+                  ? "text-ink font-semibold"
+                  : "text-muted hover:text-ink",
+              ]}
+            >
+              <span class="text-accent text-[11px] mr-1">//</span>{item.label}
+            </a>
+          );
+        })
+      }
+    </nav>
+
+    <!-- Right: Book a call CTA & Mobile Toggle -->
+    <div class="flex items-center gap-3">
+      <a
+        href={siteConfig.cta.href}
+        class="hidden sm:inline-flex items-center justify-center px-4 py-2 bg-ink text-paper text-xs font-mono tracking-wider uppercase rounded-md hover:opacity-90 transition-all active:translate-y-[1px]"
+      >
+        {siteConfig.cta.label}
+      </a>
+
+      <!-- Mobile Menu Toggle Button -->
+      <button
+        id="mobile-menu-toggle"
+        class="md:hidden flex items-center justify-center w-10 h-10 rounded-md border-hairline text-ink"
+        aria-label="Toggle Navigation"
+        aria-expanded="false"
+      >
+        <span class="sr-only">Toggle navigation</span>
+        <svg id="menu-icon-open" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+        <svg id="menu-icon-close" class="w-5 h-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Drawer -->
+  <div
+    id="mobile-drawer"
+    class="hidden md:hidden border-b border-hairline bg-[var(--paper)] px-6 py-6"
+  >
+    <nav class="flex flex-col gap-4">
+      {
+        siteConfig.nav.map((item) => (
+          <a
+            href={item.href}
+            class="mobile-nav-link text-base font-mono text-ink py-2 border-b border-hairline flex items-center justify-between"
+          >
+            <span><span class="text-accent text-xs mr-2">//</span>{item.label}</span>
+            <span class="text-muted text-xs">&rarr;</span>
+          </a>
+        ))
+      }
+      <a
+        href={siteConfig.cta.href}
+        class="mobile-nav-link mt-2 flex items-center justify-center w-full py-3 bg-ink text-paper text-xs font-mono tracking-wider uppercase rounded-md text-center"
+      >
+        {siteConfig.cta.label}
+      </a>
+    </nav>
+  </div>
+</header>
+
+<!-- Spacer to prevent content overlapping fixed header -->
+<div class="h-[68px]" aria-hidden="true"></div>
+
+<script>
+  const toggleBtn = document.getElementById("mobile-menu-toggle");
+  const drawer = document.getElementById("mobile-drawer");
+  const iconOpen = document.getElementById("menu-icon-open");
+  const iconClose = document.getElementById("menu-icon-close");
+  const mobileLinks = document.querySelectorAll(".mobile-nav-link");
+
+  if (toggleBtn && drawer && iconOpen && iconClose) {
+    let isOpen = false;
+
+    function toggleMenu(open?: boolean) {
+      isOpen = typeof open === 'boolean' ? open : !isOpen;
+      toggleBtn?.setAttribute("aria-expanded", String(isOpen));
+
+      if (isOpen) {
+        drawer?.classList.remove("hidden");
+        iconOpen?.classList.add("hidden");
+        iconClose?.classList.remove("hidden");
+      } else {
+        drawer?.classList.add("hidden");
+        iconOpen?.classList.remove("hidden");
+        iconClose?.classList.add("hidden");
+      }
+    }
+
+    toggleBtn.addEventListener("click", () => toggleMenu());
+
+    mobileLinks.forEach(link => {
+      link.addEventListener("click", () => toggleMenu(false));
+    });
+  }
+</script>

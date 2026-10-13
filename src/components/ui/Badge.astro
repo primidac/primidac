@@ -1,0 +1,25 @@
+---
+interface Props {
+  variant?: 'default' | 'brand' | 'outline';
+  size?: 'sm' | 'md';
+  class?: string;
+}
+
+const {
+  variant = 'default',
+  size = 'sm',
+  class: className,
+} = Astro.props;
+
+const variantClass = {
+  default: 'badge-default',
+  brand: 'badge-brand',
+  outline: 'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-sm text-xs font-medium text-slate-400 border border-white/[0.08]',
+}[variant];
+
+const sizeClass = size === 'md' ? 'px-3 py-1 text-sm' : '';
+---
+
+<span class:list={[variantClass, sizeClass, className]}>
+  <slot />
+</span>

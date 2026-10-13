@@ -1,0 +1,66 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getAllArticles } from '../../lib/articles';
+
+const articles = await getAllArticles();
+---
+
+<Layout
+  title="Writing — Primidac · Product Engineer"
+  description="Technical notes and insights on software architecture, application security, and AI workflow automation."
+>
+  <main class="section-padding">
+    <div class="page-container max-w-4xl">
+      
+      <!-- Section Tag -->
+      <div class="section-tag mb-6">
+        <span class="text-accent font-bold">// 01</span>
+        <span>TECHNICAL NOTES</span>
+      </div>
+
+      <div class="max-w-2xl mb-14">
+        <h1 class="h1-display mb-4">
+          Writing & Notes
+        </h1>
+        <p class="body-editorial text-ink/80">
+          Lessons learned building software, hardening web applications against real attacks, and automating workflows.
+        </p>
+      </div>
+
+      <!-- Articles Stack -->
+      <div class="space-y-6">
+        {articles.map((article) => (
+          <a
+            href={`/writing/${article.slug}`}
+            class="card-surface group block hover:border-ink/30"
+          >
+            <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 mb-3">
+              <div class="flex items-center gap-3">
+                <span class="mono-tag text-[10px]">
+                  {article.category}
+                </span>
+                <span class="font-mono text-xs text-muted">
+                  {article.publishedAt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                </span>
+                <span class="font-mono text-xs text-muted">&bull;</span>
+                <span class="font-mono text-xs text-muted">{article.readTime} min read</span>
+              </div>
+              <span class="font-mono text-xs text-accent opacity-0 group-hover:opacity-100 transition-opacity">
+                Read note &rarr;
+              </span>
+            </div>
+
+            <h2 class="text-xl sm:text-2xl font-display font-semibold text-ink mb-2 group-hover:text-accent transition-colors">
+              {article.title}
+            </h2>
+
+            <p class="text-sm sm:text-base text-ink/80 leading-relaxed max-w-2xl">
+              {article.description}
+            </p>
+          </a>
+        ))}
+      </div>
+
+    </div>
+  </main>
+</Layout>

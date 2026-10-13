@@ -1,0 +1,30 @@
+---
+interface Props {
+  variant?: 'base' | 'interactive' | 'glass' | 'dark';
+  padding?: 'sm' | 'md' | 'lg';
+  class?: string;
+}
+
+const {
+  variant = 'base',
+  padding = 'md',
+  class: className,
+} = Astro.props;
+
+const variantClass = {
+  base: 'card-base',
+  interactive: 'card-interactive',
+  glass: 'card-glass',
+  dark: 'card-dark',
+}[variant];
+
+const paddingClass = {
+  sm: 'p-4 md:p-5',
+  md: 'p-5 md:p-6',
+  lg: 'p-6 md:p-8',
+}[padding];
+---
+
+<div class:list={[variantClass, paddingClass, className]}>
+  <slot />
+</div>

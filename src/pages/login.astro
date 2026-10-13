@@ -1,0 +1,122 @@
+---
+import '../styles/global.css';
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Login - Primidac</title>
+  </head>
+  <body class="bg-surface-base font-sans antialiased text-neutral-900 min-h-screen flex items-center justify-center relative overflow-hidden">
+    
+    <!-- Structured Dot Grid Background -->
+    <div class="absolute inset-0 z-0 pointer-events-none opacity-40" style="background-image: radial-gradient(#d4d4d8 1px, transparent 1px); background-size: 24px 24px;"></div>
+
+    <div class="w-full max-w-md relative z-10 px-6">
+      <div class="bg-white border border-neutral-200 shadow-xl p-8 md:p-12 relative overflow-hidden rounded-sm">
+        
+        <!-- Logo -->
+        <div class="mb-8 flex justify-center">
+          <a href="/">
+            <div class="bg-brand-primary px-4 py-1.5 -skew-x-[15deg] flex items-center justify-center">
+              <span class="font-tech text-white text-[15px] skew-x-[15deg] tracking-widest uppercase">
+                <span class="font-black">Pri</span>midac
+              </span>
+            </div>
+          </a>
+        </div>
+
+        <h1 class="text-2xl font-sans font-bold text-neutral-900 text-center mb-2">Welcome Back</h1>
+        <p class="text-xs text-neutral-500 font-mono tracking-widest uppercase text-center mb-10">Access your workspace</p>
+        
+        <form id="login-form" class="space-y-6">
+          <div id="error-message" class="hidden text-xs text-red-600 bg-red-50 p-3 border border-red-100 rounded"></div>
+          
+          <div>
+            <label class="block text-[10px] font-mono text-neutral-500 uppercase tracking-widest mb-2">Email Address</label>
+            <input type="email" id="email" required class="w-full bg-white border border-neutral-200 px-4 py-3 text-sm focus:border-brand-primary focus:outline-none focus:ring-1 focus:ring-brand-primary transition-all rounded-sm">
+          </div>
+          
+          <div>
+            <label class="block text-[10px] font-mono text-neutral-500 uppercase tracking-widest mb-2">Password</label>
+            <div class="relative">
+              <input type="password" id="password" required class="w-full bg-white border border-neutral-200 px-4 py-3 text-sm focus:border-brand-primary focus:outline-none focus:ring-1 focus:ring-brand-primary transition-all pr-12 rounded-sm">
+              <button type="button" id="toggle-password" class="absolute inset-y-0 right-0 px-4 flex items-center text-neutral-500 hover:text-brand-primary transition-colors">
+                <span class="i-lucide-eye w-4 h-4" id="toggle-password-icon"></span>
+              </button>
+            </div>
+          </div>
+          
+          <button type="submit" id="login-submit" class="w-full py-4 bg-brand-primary text-white text-[11px] font-sans font-bold tracking-[0.1em] uppercase hover:bg-brand-deep transition-colors mt-8 relative overflow-hidden group rounded-sm shadow-[0_4px_14px_rgba(27,80,249,0.25)] hover:shadow-[0_6px_20px_rgba(27,80,249,0.4)]">
+            <span class="relative z-10 flex items-center justify-center gap-2">
+              Sign In <span class="i-lucide-arrow-right w-3 h-3"></span>
+            </span>
+          </button>
+        </form>
+        
+        <div class="mt-8 pt-6 border-t border-neutral-100 text-center flex flex-col gap-3">
+          <a href="#" class="text-[10px] font-mono text-neutral-500 uppercase tracking-widest hover:text-brand-primary transition-colors">Forgot Password?</a>
+          <a href="/" class="text-[10px] font-mono text-neutral-500 uppercase tracking-widest hover:text-brand-primary transition-colors">Return to public site</a>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
+      import { auth } from "../lib/firebase";
+      
+      const form = document.getElementById('login-form') as HTMLFormElement;
+      const errorMsg = document.getElementById('error-message');
+      const submitBtn = document.getElementById('login-submit') as HTMLButtonElement;
+      const togglePasswordBtn = document.getElementById('toggle-password');
+      const passwordInput = document.getElementById('password') as HTMLInputElement;
+      const togglePasswordIcon = document.getElementById('toggle-password-icon');
+      
+      if (togglePasswordBtn && passwordInput && togglePasswordIcon) {
+        togglePasswordBtn.addEventListener('click', () => {
+          if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            togglePasswordIcon.classList.remove('i-lucide-eye');
+            togglePasswordIcon.classList.add('i-lucide-eye-off');
+          } else {
+            passwordInput.type = 'password';
+            togglePasswordIcon.classList.remove('i-lucide-eye-off');
+            togglePasswordIcon.classList.add('i-lucide-eye');
+          }
+        });
+      }
+      
+      // Redirect if already logged in
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          window.location.href = "/dashboard";
+        }
+      });
+
+      if (form) {
+        form.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const email = (document.getElementById('email') as HTMLInputElement).value;
+          const password = (document.getElementById('password') as HTMLInputElement).value;
+          
+          try {
+            submitBtn.innerHTML = '<span class="i-lucide-loader-2 w-4 h-4 animate-spin"></span>';
+            submitBtn.disabled = true;
+            
+            await signInWithEmailAndPassword(auth, email, password);
+            // onAuthStateChanged will handle the redirect to /dashboard
+          } catch (error: any) {
+            if (errorMsg) {
+              errorMsg.textContent = error.message.replace('Firebase: ', '');
+              errorMsg.classList.remove('hidden');
+            }
+            submitBtn.innerHTML = '<span class="relative z-10 flex items-center justify-center gap-2">Sign In <span class="i-lucide-arrow-right w-3 h-3"></span></span>';
+            submitBtn.disabled = false;
+          }
+        });
+      }
+    </script>
+  </body>
+</html>

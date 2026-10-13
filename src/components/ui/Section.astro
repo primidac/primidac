@@ -1,0 +1,23 @@
+---
+interface Props {
+  id?: string;
+  padding?: 'sm' | 'md' | 'lg';
+  class?: string;
+}
+
+const {
+  id,
+  padding = 'md',
+  class: className,
+} = Astro.props;
+
+const paddingClass = {
+  sm: 'py-10 md:py-16',
+  md: 'py-16 md:py-24 lg:py-32',
+  lg: 'py-20 md:py-32 lg:py-40',
+}[padding];
+---
+
+<section id={id} class:list={[paddingClass, 'scroll-mt-20', className]}>
+  <slot />
+</section>

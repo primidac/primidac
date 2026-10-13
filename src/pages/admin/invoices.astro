@@ -1,0 +1,456 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+---
+
+<AdminLayout title="Invoices">
+  <div class="h-full flex flex-col hide-on-print">
+    <!-- Header -->
+    <div class="p-6 md:p-8 border-b border-neutral-200 bg-white flex justify-between items-center shrink-0">
+      <div>
+        <h1 class="text-2xl font-bold font-sans text-neutral-900 tracking-tight">Billing</h1>
+        <p class="text-sm font-mono text-neutral-500 mt-1">Generate invoices and receipts.</p>
+      </div>
+      <button id="btn-new-invoice" class="btn-primary py-2 px-6">
+        <span class="i-lucide-plus w-4 h-4 mr-2"></span>
+        Create Document
+      </button>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="flex-1 bg-white relative overflow-hidden">
+      
+      <!-- List View -->
+      <div id="view-list" class="absolute inset-0 overflow-auto p-6 md:p-8">
+        <table class="w-full text-left bg-white border border-neutral-200">
+          <thead class="bg-white border-b border-neutral-200">
+            <tr>
+              <th class="px-6 py-4 text-[10px] font-mono text-neutral-500 uppercase tracking-widest">Type</th>
+              <th class="px-6 py-4 text-[10px] font-mono text-neutral-500 uppercase tracking-widest">Document ID</th>
+              <th class="px-6 py-4 text-[10px] font-mono text-neutral-500 uppercase tracking-widest">Client</th>
+              <th class="px-6 py-4 text-[10px] font-mono text-neutral-500 uppercase tracking-widest">Amount</th>
+              <th class="px-6 py-4 text-[10px] font-mono text-neutral-500 uppercase tracking-widest">Status</th>
+              <th class="px-6 py-4"></th>
+            </tr>
+          </thead>
+          <tbody id="invoices-tbody">
+            {Array(5).fill(0).map(() => (
+              <tr class="border-b border-neutral-100 animate-pulse">
+                <td class="px-6 py-4"><div class="h-4 bg-neutral-200 rounded w-16"></div></td>
+                <td class="px-6 py-4"><div class="h-4 bg-neutral-200 rounded w-24"></div></td>
+                <td class="px-6 py-4"><div class="h-4 bg-neutral-200 rounded w-1/2"></div></td>
+                <td class="px-6 py-4"><div class="h-4 bg-neutral-200 rounded w-1/3"></div></td>
+                <td class="px-6 py-4"><div class="h-4 bg-neutral-200 rounded w-16"></div></td>
+                <td class="px-6 py-4"><div class="h-4 bg-neutral-200 rounded w-8 ml-auto"></div></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Editor View -->
+      <div id="view-editor" class="hidden flex-1 flex flex-col h-full bg-white absolute inset-0 z-10">
+        <div class="p-4 border-b border-neutral-200 flex justify-between items-center bg-white shrink-0">
+          <button id="btn-back" class="text-xs font-mono text-neutral-500 hover:text-neutral-900 uppercase tracking-widest flex items-center gap-2">
+            <span class="i-lucide-arrow-left w-4 h-4"></span> Back
+          </button>
+          <div class="flex items-center gap-4">
+            <button id="btn-print" class="text-xs font-mono text-brand-primary hover:underline flex items-center gap-2">
+              <span class="i-lucide-printer w-4 h-4"></span> Export PDF
+            </button>
+            <button id="btn-save" class="btn-primary py-1.5 px-4 text-xs">Save Invoice</button>
+          </div>
+        </div>
+
+        <div class="flex-1 overflow-y-auto p-4 md:p-8 lg:p-12 flex flex-col lg:flex-row gap-8">
+          
+          <!-- Builder Form -->
+          <div class="w-full lg:flex-1 space-y-6 lg:max-w-lg">
+            <h3 class="text-xs font-bold font-mono uppercase tracking-widest text-neutral-900 border-b border-neutral-100 pb-2">Invoice Details</h3>
+            
+            <div class="grid grid-cols-2 gap-4">
+              <div class="col-span-2">
+                <label class="block text-[10px] font-mono text-neutral-500 uppercase tracking-widest mb-1">Document Type</label>
+                <select id="inv-type" class="w-full bg-neutral-500 border border-neutral-200 px-3 py-2 text-sm focus:border-brand-primary focus:outline-none">
+                  <option value="Invoice">Invoice</option>
+                  <option value="Receipt">Receipt</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-[10px] font-mono text-neutral-500 uppercase tracking-widest mb-1">Document ID</label>
+                <input type="text" id="inv-id" class="w-full bg-neutral-500 border border-neutral-200 px-3 py-2 text-sm focus:border-brand-primary focus:outline-none">
+              </div>
+              <div>
+                <label class="block text-[10px] font-mono text-neutral-500 uppercase tracking-widest mb-1">Date</label>
+                <input type="date" id="inv-date" class="w-full bg-neutral-500 border border-neutral-200 px-3 py-2 text-sm focus:border-brand-primary focus:outline-none">
+              </div>
+              <div class="col-span-2">
+                <label class="block text-[10px] font-mono text-neutral-500 uppercase tracking-widest mb-1">Client Name / Company</label>
+                <input type="text" id="inv-client" class="w-full bg-neutral-500 border border-neutral-200 px-3 py-2 text-sm focus:border-brand-primary focus:outline-none">
+              </div>
+            </div>
+
+            <h3 class="text-xs font-bold font-mono uppercase tracking-widest text-neutral-900 border-b border-neutral-100 pb-2 mt-8">Line Items</h3>
+            
+            <div id="items-container" class="space-y-3">
+              <!-- Items injected here -->
+            </div>
+            
+            <button id="btn-add-item" class="text-xs font-mono text-brand-primary hover:underline flex items-center gap-1 mt-2">
+              <span class="i-lucide-plus w-3 h-3"></span> Add Item
+            </button>
+          </div>
+
+          <!-- Live Preview -->
+          <div class="w-full lg:flex-1 bg-neutral-50 p-4 sm:p-8 rounded-lg border border-neutral-200 flex items-start justify-center overflow-x-auto">
+            <div id="invoice-preview" class="bg-white w-full min-w-[320px] sm:min-w-[400px] max-w-lg shadow-sm border border-neutral-200 p-6 sm:p-8 text-neutral-900 font-sans relative overflow-hidden">
+              
+              <!-- Stamp Overlay (Hidden by default) -->
+              <div id="receipt-stamp" class="hidden absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rotate-[-15deg] pointer-events-none opacity-10">
+                <div class="border-8 border-green-600 text-green-600 text-6xl font-sans font-bold tracking-widest px-8 py-3 rounded uppercase">
+                  PAID
+                </div>
+              </div>
+
+              <div class="flex justify-between items-start mb-12 relative z-10">
+                <div>
+                  <img src="/logo.png" alt="Primidac" class="h-6 w-auto object-contain mb-2" />
+                  <div class="text-[10px] text-neutral-500 font-mono mt-1">contact@primidac.com</div>
+                </div>
+                <div class="text-right">
+                  <div class="font-mono text-xs text-neutral-500 uppercase tracking-widest" id="prev-type">Invoice</div>
+                  <div class="font-bold font-mono text-lg mt-1" id="prev-id">#000</div>
+                  <div class="text-[10px] text-neutral-500 font-mono mt-1" id="prev-date">--</div>
+                </div>
+              </div>
+
+              <div class="mb-12">
+                <div class="text-[10px] font-mono text-neutral-500 uppercase tracking-widest mb-2">Billed To</div>
+                <div class="font-bold text-sm" id="prev-client">--</div>
+              </div>
+
+              <table class="w-full text-left mb-8">
+                <thead class="border-b border-neutral-200 text-[10px] font-mono text-neutral-500 uppercase tracking-widest">
+                  <tr>
+                    <th class="py-2">Description</th>
+                    <th class="py-2 text-right">Amount</th>
+                  </tr>
+                </thead>
+                <tbody id="prev-items" class="text-sm">
+                  <!-- Items go here -->
+                </tbody>
+              </table>
+
+              <div class="flex justify-end border-t border-neutral-200 pt-4 relative z-10">
+                <div class="w-full sm:w-1/2">
+                  <div class="flex justify-between items-center text-sm mb-2" id="prev-subtotal-row">
+                    <span class="text-neutral-500">Subtotal</span>
+                    <span class="font-mono" id="prev-subtotal">$0.00</span>
+                  </div>
+                  <div class="flex justify-between items-center text-lg font-bold" id="prev-total-row">
+                    <span id="prev-total-label">Total</span>
+                    <span class="font-mono" id="prev-total">$0.00</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style is:global>
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      .hide-on-print {
+        display: none !important;
+      }
+      #invoice-preview, #invoice-preview * {
+        visibility: visible;
+      }
+      #invoice-preview {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        max-width: none;
+        border: none;
+        box-shadow: none;
+        padding: 0;
+      }
+    }
+  </style>
+
+  <script>
+    import { collection, query, orderBy, getDocs, setDoc, doc, serverTimestamp } from "firebase/firestore";
+    import { db } from "../../lib/firebase";
+
+    // DOM Elements
+    const viewList = document.getElementById('view-list');
+    const viewEditor = document.getElementById('view-editor');
+    const tbody = document.getElementById('invoices-tbody');
+    
+    const btnNew = document.getElementById('btn-new-invoice');
+    const btnBack = document.getElementById('btn-back');
+    const btnSave = document.getElementById('btn-save');
+    const btnPrint = document.getElementById('btn-print');
+    const btnAddItem = document.getElementById('btn-add-item');
+
+    // Form fields
+    const fType = document.getElementById('inv-type') as HTMLSelectElement;
+    const fId = document.getElementById('inv-id') as HTMLInputElement;
+    const fDate = document.getElementById('inv-date') as HTMLInputElement;
+    const fClient = document.getElementById('inv-client') as HTMLInputElement;
+    const itemsContainer = document.getElementById('items-container');
+
+    // Preview fields
+    const pType = document.getElementById('prev-type');
+    const pId = document.getElementById('prev-id');
+    const pDate = document.getElementById('prev-date');
+    const pClient = document.getElementById('prev-client');
+    const pItems = document.getElementById('prev-items');
+    const pSubtotal = document.getElementById('prev-subtotal');
+    const pSubtotalRow = document.getElementById('prev-subtotal-row');
+    const pTotal = document.getElementById('prev-total');
+    const pTotalLabel = document.getElementById('prev-total-label');
+    const pStamp = document.getElementById('receipt-stamp');
+
+    let currentDocId: string | null = null;
+    let invoicesData: any[] = [];
+    let lineItems: { desc: string, amount: number }[] = [];
+
+    // Formatter
+    const formatCurrency = (amount: number) => {
+      return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
+    };
+
+    // Load Invoices
+    async function loadInvoices() {
+      try {
+        const q = query(collection(db, "invoices"), orderBy("createdAt", "desc"));
+        const snapshot = await getDocs(q);
+        invoicesData = snapshot.docs.map(doc => ({ docId: doc.id, ...doc.data() }));
+        renderList();
+      } catch (error) {
+        console.error("Error loading invoices:", error);
+        if (tbody) tbody.innerHTML = `<tr><td colspan="5" class="px-6 py-8 text-center text-red-500">Error loading data</td></tr>`;
+      }
+    }
+
+    function renderList() {
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      if (invoicesData.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="px-6 py-12 text-center text-sm font-mono text-neutral-500">No invoices yet.</td></tr>`;
+        return;
+      }
+
+      invoicesData.forEach(inv => {
+        const date = inv.date || 'N/A';
+        const tr = document.createElement('tr');
+        tr.className = 'border-b border-neutral-100 hover:bg-white transition-colors group cursor-pointer';
+        
+        tr.innerHTML = `
+          <td class="px-6 py-4">
+            <span class="inline-flex items-center px-2 py-1 rounded bg-neutral-50 text-neutral-600 text-[10px] font-mono uppercase tracking-widest border border-neutral-200">${inv.type || 'Invoice'}</span>
+          </td>
+          <td class="px-6 py-4 font-mono text-sm font-bold text-neutral-900">${inv.id}</td>
+          <td class="px-6 py-4 text-xs font-sans text-neutral-600">${inv.client}</td>
+          <td class="px-6 py-4 text-xs font-mono text-neutral-900">${formatCurrency(inv.total)}</td>
+          <td class="px-6 py-4">
+            <span class="inline-flex items-center px-2 py-1 rounded bg-neutral-50 text-neutral-600 text-[10px] font-mono uppercase tracking-widest border border-neutral-200">${inv.status || 'Saved'}</span>
+          </td>
+          <td class="px-6 py-4 text-right">
+            <span class="text-xs font-mono text-brand-primary hover:underline">View</span>
+          </td>
+        `;
+        
+        tr.addEventListener('click', () => openEditor(inv));
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Update Preview
+    function updatePreview() {
+      const isReceipt = fType.value === 'Receipt';
+      
+      if(pType) pType.innerText = fType.value || 'Invoice';
+      if(pId) pId.innerText = fId.value || '#000';
+      if(pDate) pDate.innerText = fDate.value || '--';
+      if(pClient) pClient.innerText = fClient.value || '--';
+
+      if(pItems) {
+        pItems.innerHTML = lineItems.map((item, i) => `
+          <tr class="border-b border-neutral-100 last:border-0">
+            <td class="py-3">${item.desc || 'Item'}</td>
+            <td class="py-3 text-right font-mono">${formatCurrency(item.amount || 0)}</td>
+          </tr>
+        `).join('');
+      }
+
+      const total = lineItems.reduce((acc, curr) => acc + (curr.amount || 0), 0);
+      if(pSubtotal) pSubtotal.innerText = formatCurrency(total);
+      if(pTotal) pTotal.innerText = formatCurrency(total);
+
+      // Handle distinct designs
+      if (isReceipt) {
+        if (pStamp) pStamp.classList.remove('hidden');
+        if (pSubtotalRow) pSubtotalRow.classList.add('hidden');
+        if (pTotalLabel) pTotalLabel.innerText = "Amount Paid";
+      } else {
+        if (pStamp) pStamp.classList.add('hidden');
+        if (pSubtotalRow) pSubtotalRow.classList.remove('hidden');
+        if (pTotalLabel) pTotalLabel.innerText = "Total Due";
+      }
+    }
+
+    function renderItemsForm() {
+      if (!itemsContainer) return;
+      itemsContainer.innerHTML = '';
+      
+      lineItems.forEach((item, index) => {
+        const row = document.createElement('div');
+        row.className = 'flex gap-2 items-start';
+        row.innerHTML = `
+          <input type="text" placeholder="Description" class="flex-1 bg-white border border-neutral-200 px-3 py-2 text-sm focus:border-brand-primary focus:outline-none item-desc" value="${item.desc}">
+          <input type="number" placeholder="0.00" class="w-24 bg-white border border-neutral-200 px-3 py-2 text-sm focus:border-brand-primary focus:outline-none font-mono item-amt" value="${item.amount}">
+          <button class="p-2 text-red-500 hover:bg-red-50 rounded btn-del-item">
+            <span class="i-lucide-trash-2 w-4 h-4"></span>
+          </button>
+        `;
+
+        const descInput = row.querySelector('.item-desc') as HTMLInputElement;
+        const amtInput = row.querySelector('.item-amt') as HTMLInputElement;
+        const delBtn = row.querySelector('.btn-del-item') as HTMLButtonElement;
+
+        descInput.addEventListener('input', (e) => {
+          lineItems[index].desc = (e.target as HTMLInputElement).value;
+          updatePreview();
+        });
+
+        amtInput.addEventListener('input', (e) => {
+          lineItems[index].amount = parseFloat((e.target as HTMLInputElement).value) || 0;
+          updatePreview();
+        });
+
+        delBtn.addEventListener('click', () => {
+          lineItems.splice(index, 1);
+          renderItemsForm();
+          updatePreview();
+        });
+
+        itemsContainer.appendChild(row);
+      });
+      updatePreview();
+    }
+
+    // Listeners for form inputs
+    [fType, fId, fDate, fClient].forEach(el => {
+      el?.addEventListener('input', updatePreview);
+    });
+
+    btnAddItem?.addEventListener('click', () => {
+      lineItems.push({ desc: '', amount: 0 });
+      renderItemsForm();
+    });
+
+    // Navigation
+    function openEditor(inv: any = null) {
+      if (inv) {
+        currentDocId = inv.docId;
+        fType.value = inv.type || 'Invoice';
+        fId.value = inv.id;
+        fDate.value = inv.date;
+        fClient.value = inv.client;
+        lineItems = inv.items || [];
+      } else {
+        currentDocId = null;
+        fType.value = 'Invoice';
+        fId.value = `DOC-${Date.now().toString().slice(-4)}`;
+        fDate.value = new Date().toISOString().split('T')[0];
+        fClient.value = '';
+        lineItems = [{ desc: 'Consulting Services', amount: 1000 }];
+      }
+      
+      renderItemsForm();
+      viewList?.classList.add('hidden');
+      viewEditor?.classList.remove('hidden');
+    }
+
+    btnNew?.addEventListener('click', () => openEditor());
+
+    btnBack?.addEventListener('click', () => {
+      viewEditor?.classList.add('hidden');
+      viewList?.classList.remove('hidden');
+    });
+
+    btnPrint?.addEventListener('click', () => {
+      window.print();
+    });
+
+    // Save
+    btnSave?.addEventListener('click', async () => {
+      if (!fId.value || !fClient.value) {
+        window.showToast("Document ID and Client Name are required.", "error");
+        return;
+      }
+
+      const originalText = btnSave.innerText;
+      btnSave.innerText = "Saving...";
+      (btnSave as HTMLButtonElement).disabled = true;
+
+      try {
+        const total = lineItems.reduce((acc, curr) => acc + (curr.amount || 0), 0);
+        const data = {
+          type: fType.value,
+          id: fId.value,
+          date: fDate.value,
+          client: fClient.value,
+          items: lineItems,
+          total: total,
+          status: 'saved',
+          updatedAt: new Date().toISOString()
+        };
+
+        let ref;
+        if (currentDocId) {
+          ref = doc(db, "invoices", currentDocId);
+          await setDoc(ref, data, { merge: true });
+        } else {
+          ref = doc(collection(db, "invoices"));
+          await setDoc(ref, { ...data, createdAt: serverTimestamp() });
+        }
+
+        viewEditor?.classList.add('hidden');
+        viewList?.classList.remove('hidden');
+        
+        const skeletonHtml = Array(5).fill(0).map(() => `
+          <tr class="border-b border-neutral-100 animate-pulse">
+            <td class="px-6 py-4"><div class="h-4 bg-neutral-200 rounded w-16"></div></td>
+            <td class="px-6 py-4"><div class="h-4 bg-neutral-200 rounded w-24"></div></td>
+            <td class="px-6 py-4"><div class="h-4 bg-neutral-200 rounded w-1/2"></div></td>
+            <td class="px-6 py-4"><div class="h-4 bg-neutral-200 rounded w-1/3"></div></td>
+            <td class="px-6 py-4"><div class="h-4 bg-neutral-200 rounded w-16"></div></td>
+            <td class="px-6 py-4"><div class="h-4 bg-neutral-200 rounded w-8 ml-auto"></div></td>
+          </tr>
+        `).join('');
+        tbody!.innerHTML = skeletonHtml;
+        await loadInvoices();
+
+      } catch (error) {
+        console.error("Error saving:", error);
+        window.showToast("Failed to save.", "error");
+      } finally {
+        btnSave.innerText = originalText;
+        (btnSave as HTMLButtonElement).disabled = false;
+      }
+    });
+
+    // Init
+    loadInvoices();
+  </script>
+</AdminLayout>

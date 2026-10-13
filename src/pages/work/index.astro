@@ -1,0 +1,84 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const work = await getCollection('work');
+// Sort by year descending
+work.sort((a, b) => b.data.year - a.data.year);
+---
+
+<Layout title="Selected Work — Primidac Technology" description="A collection of products, systems and experiments built across different areas of technology.">
+  <main class="bg-surface-base min-h-screen relative overflow-hidden pt-32 pb-32">
+    
+    <!-- Massive Watermark Background -->
+    <div class="absolute inset-0 flex items-center justify-center overflow-hidden pointer-events-none select-none opacity-[0.03] fixed top-0">
+      <div class="whitespace-nowrap font-tech font-bold text-[18vw] tracking-widest uppercase text-transparent bg-clip-text bg-gradient-to-b from-black to-transparent" style="-webkit-text-stroke: 2px rgba(0,0,0,0.15);">
+        PORTFOLIO
+      </div>
+    </div>
+    
+    <!-- Bionic Grid Overlay -->
+    <div class="absolute inset-0 pointer-events-none opacity-[0.02] mix-blend-overlay z-0" style="background-image: linear-gradient(#E4E6EB 1px, transparent 1px), linear-gradient(90deg, #E4E6EB 1px, transparent 1px); background-size: 32px 32px;"></div>
+
+    <div class="page-container relative z-10 px-6 lg:px-12">
+      
+      <!-- Tech-Heavy Hero Section -->
+      <div class="max-w-4xl mb-24 mt-12 relative">
+        <div class="inline-flex items-center gap-4 mb-6">
+          <div class="h-[1px] w-12 bg-brand-primary opacity-80"></div>
+          <span class="text-[10px] font-sans font-bold text-brand-primary uppercase tracking-[0.2em]">Engineering_Portfolio</span>
+        </div>
+        <h1 class="font-display font-bold text-5xl md:text-7xl text-neutral-900 tracking-tighter mb-8 leading-[1.1]">
+          Selected Work
+        </h1>
+        <p class="text-lg md:text-xl text-neutral-700 font-sans max-w-2xl leading-relaxed">
+          A collection of products, systems and experiments built across different areas of technology.
+        </p>
+      </div>
+
+      <!-- Project Grid with Glassmorphism Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10 relative z-20">
+        {work.map((project) => (
+          <a href={`/work/${project.slug}`} class="group block relative">
+            <div class="bg-white backdrop-blur-md border border-neutral-200 rounded-sm p-4 md:p-6 h-full flex flex-col transition-all duration-500 hover:-translate-y-1.5 hover:shadow-lg hover:border-neutral-300 hover:bg-neutral-100">
+              
+              <!-- Thumbnail Container -->
+              <div class="aspect-[4/3] bg-[#0A0B0C] border border-white/5 rounded-sm mb-6 flex items-center justify-center relative overflow-hidden group-hover:border-brand-primary/30 transition-colors duration-500">
+                
+                <!-- Decorative Tape (Investigator Board Vibe) -->
+                <div class="absolute -top-3 right-8 w-16 h-8 bg-white backdrop-blur-sm -rotate-[4deg] z-10 border border-neutral-200 shadow-sm"></div>
+                
+                <!-- Placeholder Tech Content -->
+                <span class="text-mono-tech text-[10px] text-neutral-500 group-hover:text-brand-primary/60 transition-colors duration-500 flex items-center gap-2">
+                  <span class="w-1.5 h-1.5 rounded-full bg-neutral-200 group-hover:bg-brand-primary group-hover:animate-pulse"></span>
+                  [NO_IMAGE_DATA]
+                </span>
+                
+                <!-- Scanning Line Effect on Hover -->
+                <div class="absolute inset-0 bg-gradient-to-b from-transparent via-brand-primary/10 to-transparent -translate-y-full group-hover:animate-[scan_3s_ease-in-out_infinite] opacity-0 group-hover:opacity-100 pointer-events-none"></div>
+              </div>
+              
+              <!-- Details -->
+              <div class="flex justify-between items-start gap-4 mt-auto">
+                <div class="flex-1">
+                  <h2 class="font-display font-semibold text-2xl text-neutral-900 mb-3 group-hover:text-neutral-900 transition-colors">{project.data.title}</h2>
+                  <p class="text-sm font-sans text-neutral-600 leading-relaxed line-clamp-2">{project.data.description}</p>
+                </div>
+                <div class="text-[10px] font-sans font-bold tracking-[0.1em] text-neutral-500 group-hover:text-brand-primary transition-colors mt-1 shrink-0 border border-neutral-200 rounded-sm px-3 py-1.5 bg-neutral-50 group-hover:border-brand-primary/30">
+                  {project.data.year}
+                </div>
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  @keyframes scan {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(100%); }
+  }
+</style>

@@ -1,0 +1,241 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+---
+
+<AdminLayout title="Portfolio Manager">
+  <div class="h-full flex flex-col">
+    <!-- Header -->
+    <div class="p-6 md:p-8 border-b border-neutral-200 bg-white flex justify-between items-center shrink-0">
+      <div>
+        <h1 class="text-2xl font-bold font-sans text-neutral-900 tracking-tight">Portfolio Manager</h1>
+        <p class="text-sm font-mono text-neutral-500 mt-1">Manage case studies and projects.</p>
+      </div>
+      <button id="btn-new-project" class="btn-primary py-2 px-6">
+        <span class="i-lucide-plus w-4 h-4 mr-2"></span>
+        New Project
+      </button>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="flex-1 bg-white relative overflow-hidden">
+      
+      <!-- List View -->
+      <div id="view-list" class="absolute inset-0 overflow-auto p-6 md:p-8">
+        <table class="w-full text-left bg-white border border-neutral-200">
+          <thead class="bg-white border-b border-neutral-200">
+            <tr>
+              <th class="px-6 py-4 text-[10px] font-mono text-neutral-500 uppercase tracking-widest">Project</th>
+              <th class="px-6 py-4 text-[10px] font-mono text-neutral-500 uppercase tracking-widest">Client</th>
+              <th class="px-6 py-4 text-[10px] font-mono text-neutral-500 uppercase tracking-widest">Status</th>
+              <th class="px-6 py-4 text-[10px] font-mono text-neutral-500 uppercase tracking-widest">Date</th>
+              <th class="px-6 py-4"></th>
+            </tr>
+          </thead>
+          <tbody id="portfolio-tbody">
+            {Array(5).fill(0).map(() => (
+              <tr class="border-b border-neutral-100 animate-pulse">
+                <td class="px-6 py-4"><div class="h-4 bg-neutral-200 rounded w-3/4"></div></td>
+                <td class="px-6 py-4"><div class="h-4 bg-neutral-200 rounded w-1/2"></div></td>
+                <td class="px-6 py-4"><div class="h-4 bg-neutral-200 rounded w-1/3"></div></td>
+                <td class="px-6 py-4"><div class="h-4 bg-neutral-200 rounded w-2/3"></div></td>
+                <td class="px-6 py-4"><div class="h-4 bg-neutral-200 rounded w-8 ml-auto"></div></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Editor View (Hidden by default) -->
+      <div id="view-editor" class="hidden flex-1 flex flex-col h-full bg-white absolute inset-0 z-10">
+        <div class="p-4 border-b border-neutral-200 flex justify-between items-center bg-white shrink-0">
+          <button id="btn-back" class="text-xs font-mono text-neutral-500 hover:text-neutral-900 uppercase tracking-widest flex items-center gap-2">
+            <span class="i-lucide-arrow-left w-4 h-4"></span> Back
+          </button>
+          <div class="flex items-center gap-4">
+            <span id="editor-status" class="text-xs font-mono text-neutral-500">Draft</span>
+            <button id="btn-publish" class="btn-primary py-1.5 px-4 text-xs">Publish</button>
+          </div>
+        </div>
+
+        <div class="flex-1 overflow-y-auto p-8 md:p-12">
+          <div class="max-w-3xl mx-auto space-y-6">
+            <input type="text" id="project-title" placeholder="Project Title" class="w-full text-3xl font-sans font-bold text-neutral-900 placeholder:text-neutral-600 border-none focus:outline-none focus:ring-0 bg-transparent px-0">
+            
+            <div class="grid grid-cols-2 gap-6">
+              <div>
+                <label class="block text-[10px] font-mono text-neutral-500 uppercase tracking-widest mb-2">Client Name</label>
+                <input type="text" id="project-client" placeholder="e.g. Acme Corp" class="w-full bg-neutral-500 border border-neutral-200 px-4 py-3 text-sm focus:border-brand-primary focus:outline-none transition-all">
+              </div>
+              <div>
+                <label class="block text-[10px] font-mono text-neutral-500 uppercase tracking-widest mb-2">Category</label>
+                <input type="text" id="project-category" placeholder="e.g. Web App" class="w-full bg-neutral-500 border border-neutral-200 px-4 py-3 text-sm focus:border-brand-primary focus:outline-none transition-all">
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-[10px] font-mono text-neutral-500 uppercase tracking-widest mb-2">Cover Image URL</label>
+              <input type="text" id="project-cover" placeholder="https://..." class="w-full bg-neutral-500 border border-neutral-200 px-4 py-3 text-sm focus:border-brand-primary focus:outline-none transition-all">
+            </div>
+
+            <div>
+              <label class="block text-[10px] font-mono text-neutral-500 uppercase tracking-widest mb-2">Short Description</label>
+              <textarea id="project-desc" rows="2" placeholder="Brief summary of the project..." class="w-full bg-neutral-500 border border-neutral-200 px-4 py-3 text-sm focus:border-brand-primary focus:outline-none transition-all resize-none"></textarea>
+            </div>
+
+            <div>
+              <div class="flex justify-between items-center mb-2">
+                <label class="block text-[10px] font-mono text-neutral-500 uppercase tracking-widest">Case Study Content (Markdown)</label>
+              </div>
+              <textarea id="project-content" rows="15" placeholder="Write your full case study here using Markdown..." class="w-full font-mono bg-white border border-neutral-200 px-4 py-4 text-sm focus:border-brand-primary focus:outline-none transition-all"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    import { collection, query, orderBy, getDocs, addDoc, serverTimestamp } from "firebase/firestore";
+    import { db } from "../../lib/firebase";
+
+    // DOM Elements
+    const viewList = document.getElementById('view-list');
+    const viewEditor = document.getElementById('view-editor');
+    const tbody = document.getElementById('portfolio-tbody');
+    
+    const btnNew = document.getElementById('btn-new-project');
+    const btnBack = document.getElementById('btn-back');
+    const btnPublish = document.getElementById('btn-publish');
+
+    // Form fields
+    const fTitle = document.getElementById('project-title') as HTMLInputElement;
+    const fClient = document.getElementById('project-client') as HTMLInputElement;
+    const fCategory = document.getElementById('project-category') as HTMLInputElement;
+    const fCover = document.getElementById('project-cover') as HTMLInputElement;
+    const fDesc = document.getElementById('project-desc') as HTMLTextAreaElement;
+    const fContent = document.getElementById('project-content') as HTMLTextAreaElement;
+
+    let projectsData: any[] = [];
+
+    // Load Projects
+    async function loadProjects() {
+      try {
+        const q = query(collection(db, "portfolio"), orderBy("createdAt", "desc"));
+        const snapshot = await getDocs(q);
+        projectsData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        renderList();
+      } catch (error) {
+        console.error("Error loading projects:", error);
+        if (tbody) tbody.innerHTML = `<tr><td colspan="5" class="px-6 py-8 text-center text-red-500">Error loading data</td></tr>`;
+      }
+    }
+
+    function renderList() {
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      if (projectsData.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="px-6 py-12 text-center text-sm font-mono text-neutral-500">No projects published yet.</td></tr>`;
+        return;
+      }
+
+      projectsData.forEach(project => {
+        const date = project.createdAt ? new Date(project.createdAt.seconds * 1000).toLocaleDateString() : 'Draft';
+        const tr = document.createElement('tr');
+        tr.className = 'border-b border-neutral-100 hover:bg-white transition-colors group';
+        
+        tr.innerHTML = `
+          <td class="px-6 py-4">
+            <div class="font-sans font-bold text-sm text-neutral-900">${project.title}</div>
+            <div class="text-[10px] text-neutral-500 font-mono mt-1">${project.category}</div>
+          </td>
+          <td class="px-6 py-4 text-xs text-neutral-600">
+            ${project.client || '-'}
+          </td>
+          <td class="px-6 py-4">
+            <span class="inline-flex items-center px-2 py-1 rounded bg-green-50 text-green-700 text-[10px] font-mono uppercase tracking-widest border border-green-200">Published</span>
+          </td>
+          <td class="px-6 py-4 text-xs font-mono text-neutral-500">
+            ${date}
+          </td>
+          <td class="px-6 py-4 text-right">
+            <button class="text-xs font-mono text-brand-primary hover:underline">Edit</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Navigation
+    btnNew?.addEventListener('click', () => {
+      fTitle.value = '';
+      fClient.value = '';
+      fCategory.value = '';
+      fCover.value = '';
+      fDesc.value = '';
+      fContent.value = '';
+      
+      viewList?.classList.add('hidden');
+      viewEditor?.classList.remove('hidden');
+    });
+
+    btnBack?.addEventListener('click', () => {
+      viewEditor?.classList.add('hidden');
+      viewList?.classList.remove('hidden');
+    });
+
+    // Publish
+    btnPublish?.addEventListener('click', async () => {
+      if (!fTitle.value || !fContent.value) {
+        window.showToast("Title and Content are required.", "error");
+        return;
+      }
+
+      const originalText = btnPublish.innerText;
+      btnPublish.innerText = "Publishing...";
+      (btnPublish as HTMLButtonElement).disabled = true;
+
+      try {
+        const slug = fTitle.value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+
+        await addDoc(collection(db, "portfolio"), {
+          title: fTitle.value,
+          slug: slug,
+          client: fClient.value || '',
+          category: fCategory.value || 'Uncategorized',
+          coverImage: fCover.value || '',
+          description: fDesc.value,
+          content: fContent.value,
+          status: 'published',
+          createdAt: serverTimestamp()
+        });
+
+        viewEditor?.classList.add('hidden');
+        viewList?.classList.remove('hidden');
+        
+        const skeletonHtml = Array(5).fill(0).map(() => `
+          <tr class="border-b border-neutral-100 animate-pulse">
+            <td class="px-6 py-4"><div class="h-4 bg-neutral-200 rounded w-3/4"></div></td>
+            <td class="px-6 py-4"><div class="h-4 bg-neutral-200 rounded w-1/2"></div></td>
+            <td class="px-6 py-4"><div class="h-4 bg-neutral-200 rounded w-1/3"></div></td>
+            <td class="px-6 py-4"><div class="h-4 bg-neutral-200 rounded w-2/3"></div></td>
+            <td class="px-6 py-4"><div class="h-4 bg-neutral-200 rounded w-8 ml-auto"></div></td>
+          </tr>
+        `).join('');
+        tbody!.innerHTML = skeletonHtml;
+        await loadProjects();
+
+      } catch (error) {
+        console.error("Error publishing:", error);
+        window.showToast("Failed to publish.", "error");
+      } finally {
+        btnPublish.innerText = originalText;
+        (btnPublish as HTMLButtonElement).disabled = false;
+      }
+    });
+
+    // Init
+    loadProjects();
+  </script>
+</AdminLayout>

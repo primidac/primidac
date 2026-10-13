@@ -1,0 +1,105 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="About — Primidac · Product Engineer"
+  description="I'm Primidac, a product engineer specializing in cyber security and AI automation."
+>
+  <main class="section-padding">
+    <div class="page-container max-w-4xl">
+      
+      <!-- Section Tag -->
+      <div class="section-tag mb-6">
+        <span class="text-accent font-bold">// 01</span>
+        <span>BACKGROUND & ETHOS</span>
+      </div>
+
+      <h1 class="h1-display mb-10">
+        About Primidac
+      </h1>
+
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-10 items-start mb-16">
+        <!-- Photo -->
+        <div class="md:col-span-5">
+          <div class="rounded-lg overflow-hidden border-hairline bg-neutral-200 aspect-square">
+            <img
+              src="/images/founder.jpg"
+              alt="Primidac"
+              class="w-full h-full object-cover grayscale contrast-110 hover:grayscale-0 transition-all duration-500"
+            />
+          </div>
+        </div>
+
+        <!-- Bio Details -->
+        <div class="md:col-span-7 space-y-5 body-editorial">
+          <p class="text-lg font-medium text-ink">
+            I’m Primidac, a product engineer building software end to end with a dedicated focus on cyber security and AI automation.
+          </p>
+          <p class="text-ink/85">
+            I care deeply about two things most teams treat as extras: defensive hardening and workflow automation. Rather than treating security as a checkbox, I architect software to be resistant to real attack vectors from the very first commit.
+          </p>
+          <p class="text-ink/85">
+            Through Primidac Labs, I design and operate independent software products like WorkCrayon and organize <a href="https://primidacnetwork.xyz" target="_blank" rel="noopener noreferrer" class="link-underline font-semibold text-ink">Primidac Network</a>, a private collective for verified security and AI builders.
+          </p>
+
+          <!-- Three Facts -->
+          <div class="w-full p-5 sm:p-6 bg-surface-subtle border-hairline rounded-lg grid grid-cols-1 sm:grid-cols-3 gap-5 text-left mt-6">
+            <div>
+              <span class="font-mono text-xs text-muted uppercase block mb-1">// Experience</span>
+              <span class="text-sm font-display font-semibold text-ink">10+ Years</span>
+              <p class="text-xs text-muted mt-0.5">Shipping secure software since 2015</p>
+            </div>
+            <div>
+              <span class="font-mono text-xs text-muted uppercase block mb-1">// Main Stack</span>
+              <span class="text-sm font-display font-semibold text-ink">TypeScript, Python & Go</span>
+              <p class="text-xs text-muted mt-0.5">Postgres (RLS), FastAPI, Docker, Cloudflare</p>
+            </div>
+            <div>
+              <span class="font-mono text-xs text-muted uppercase block mb-1">// Proof</span>
+              <span class="text-sm font-display font-semibold text-ink">Shipped Products</span>
+              <p class="text-xs text-muted mt-0.5">WorkCrayon, Network, Agent Blake</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Core Principles -->
+      <div class="card-surface mb-16 space-y-6">
+        <h2 class="text-xl font-display font-semibold text-ink">
+          // Engineering Principles
+        </h2>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm">
+          <div class="border-l-2 border-accent pl-4">
+            <h3 class="font-display font-semibold text-ink mb-1">Build Useful Things</h3>
+            <p class="text-ink/80">Software exists to solve real problems, not showcase unnecessary dependencies.</p>
+          </div>
+          <div class="border-l-2 border-accent pl-4">
+            <h3 class="font-display font-semibold text-ink mb-1">Defense in Depth</h3>
+            <p class="text-ink/80">Never trust client state. Verify signatures in constant time and enforce least privilege.</p>
+          </div>
+          <div class="border-l-2 border-accent pl-4">
+            <h3 class="font-display font-semibold text-ink mb-1">Deterministic AI</h3>
+            <p class="text-ink/80">Constrain language models with rigid schema guardrails to prevent state corruption.</p>
+          </div>
+          <div class="border-l-2 border-accent pl-4">
+            <h3 class="font-display font-semibold text-ink mb-1">Verifiable Quality</h3>
+            <p class="text-ink/80">Strict TypeScript, continuous CI automated testing, and sub-second execution speeds.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Action -->
+      <div class="flex items-center gap-6">
+        <a href="/#work" class="btn-primary">
+          View Selected Work &rarr;
+        </a>
+        <a href="/#contact" class="link-underline font-mono text-xs uppercase tracking-wider">
+          Get in touch
+        </a>
+      </div>
+
+    </div>
+  </main>
+</Layout>

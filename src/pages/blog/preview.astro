@@ -1,0 +1,159 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout title="Preview Article — Primidac" description="Previewing drafted article">
+  <div class="bg-surface-base min-h-screen w-full relative overflow-hidden">
+    
+    <!-- Preview Badge -->
+    <div class="fixed top-6 right-6 z-50 bg-brand-primary text-white px-4 py-2 rounded-full font-mono text-xs tracking-widest shadow-lg flex items-center gap-2 pointer-events-none">
+      <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span> PREVIEW MODE
+    </div>
+
+    <!-- Structured Dot Grid Background -->
+    <div class="absolute inset-0 z-0 pointer-events-none opacity-40" style="background-image: radial-gradient(#d4d4d8 1px, transparent 1px); background-size: 24px 24px;">
+      <!-- Gradient mask to fade out the dots towards the bottom -->
+      <div class="absolute inset-0 bg-gradient-to-b from-transparent via-surface-base/80 to-surface-base"></div>
+    </div>
+
+    <!-- Progress Indicator -->
+    <div class="fixed top-20 left-0 w-full h-1 bg-neutral-200 z-40">
+      <div class="h-full bg-brand-primary w-1/3" id="reading-progress"></div>
+    </div>
+
+    <!-- Article Hero -->
+    <header class="relative z-10 pt-32 md:pt-48 pb-16 md:pb-24 px-6 md:px-12 max-w-[1000px] mx-auto border-b border-neutral-200/50">
+      <div class="gsap-hero-stagger">
+        <div class="flex items-center gap-4 text-[10px] font-mono uppercase tracking-widest text-neutral-500 mb-8 md:mb-10">
+          <button onclick="window.close()" class="hover:text-brand-primary transition-colors flex items-center gap-2 cursor-pointer">
+            <span class="i-lucide-arrow-left w-3 h-3"></span> Back to Editor
+          </button>
+          <span>/</span>
+          <span class="text-brand-primary" id="preview-category">Uncategorized</span>
+          <span class="hidden sm:inline">&mdash;</span>
+          <span class="hidden sm:inline" id="preview-date">Preview Date</span>
+          <span class="hidden sm:inline">&mdash;</span>
+          <span class="hidden sm:inline"><span id="preview-readtime">5</span> Min Read</span>
+        </div>
+        
+        <h1 id="preview-title" class="text-3xl sm:text-5xl md:text-6xl lg:text-[80px] leading-tight md:leading-[1.05] tracking-tight font-sans font-bold text-neutral-900 mb-8">
+          Loading Preview...
+        </h1>
+        
+        <p id="preview-excerpt" class="text-lg md:text-2xl text-neutral-600 leading-snug font-medium max-w-3xl">
+          
+        </p>
+
+        <!-- Author Block -->
+        <div class="mt-12 flex items-center gap-4 pt-8 border-t border-neutral-200/50 max-w-md">
+          <div class="w-12 h-12 bg-neutral-200 rounded-full flex items-center justify-center overflow-hidden">
+            <span class="i-lucide-user w-5 h-5 text-neutral-500"></span>
+          </div>
+          <div>
+            <div class="font-sans font-bold text-neutral-900 text-sm" id="preview-author">Primidac Editorial</div>
+            <div class="font-mono text-[10px] text-neutral-500 uppercase tracking-widest mt-0.5" id="preview-author-role">Engineering</div>
+          </div>
+        </div>
+
+        <!-- Cover Image (Hidden by default) -->
+        <div id="preview-image-container" class="mt-16 w-full rounded-2xl overflow-hidden border border-neutral-200 shadow-xl hidden">
+          <img id="preview-image" src="" alt="Cover" class="w-full h-auto object-cover max-h-[600px]" />
+        </div>
+      </div>
+    </header>
+
+    <!-- Article Content -->
+    <article id="preview-content" class="relative z-10 py-12 md:py-24 px-6 md:px-12 max-w-[800px] mx-auto prose prose-neutral prose-lg md:prose-xl max-w-none prose-headings:font-sans prose-headings:font-bold prose-headings:tracking-tight prose-a:text-brand-primary prose-a:no-underline hover:prose-a:underline prose-img:rounded-xl prose-img:border prose-img:border-neutral-200" data-reveal>
+      
+    </article>
+
+    <!-- Footer Navigation -->
+    <div class="border-t-layout bg-white relative z-10 py-16">
+      <div class="max-w-[1000px] mx-auto px-6 md:px-12 flex flex-col md:flex-row justify-between items-center gap-8" data-reveal>
+        <div>
+          <div class="text-mono-tech mb-2">Keep Reading</div>
+          <div class="font-sans font-bold text-xl text-neutral-900">Explore more research.</div>
+        </div>
+        
+        <button onclick="window.close()" class="btn-secondary cursor-pointer">
+          <span class="i-lucide-arrow-left w-4 h-4 mr-2"></span> Back to Editor
+        </button>
+      </div>
+    </div>
+    
+  </div>
+</Layout>
+
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script>
+  // Simple reading progress bar
+  document.addEventListener('DOMContentLoaded', () => {
+    const progressBar = document.getElementById('reading-progress');
+    
+    window.addEventListener('scroll', () => {
+      if (!progressBar) return;
+      const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = (winScroll / height) * 100;
+      progressBar.style.width = scrolled + '%';
+    });
+
+    // Hydrate preview data
+    const previewDataStr = sessionStorage.getItem('primidac_blog_preview');
+    if (!previewDataStr) {
+      const el = document.getElementById('preview-title');
+      if (el) el.innerText = "No Preview Data Found";
+      const contentEl = document.getElementById('preview-content');
+      if (contentEl) contentEl.innerHTML = "<p>Please return to the editor and click Preview.</p>";
+      return;
+    }
+
+    try {
+      const data = JSON.parse(previewDataStr);
+      
+      const setEl = (id: string, val: string, isHTML: boolean = false) => {
+        const el = document.getElementById(id);
+        if (el && val) {
+          if (isHTML) el.innerHTML = val;
+          else el.innerText = val;
+        }
+      };
+
+      setEl('preview-title', data.title || 'Untitled Article');
+      setEl('preview-category', data.category || 'Uncategorized');
+      setEl('preview-readtime', data.readTime || '5');
+      setEl('preview-excerpt', data.excerpt || '');
+      
+      const date = new Date().toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+      setEl('preview-date', date);
+
+      // We use marked.js in case the content is markdown
+      // But if it's already HTML, marked will generally just pass it through
+      let contentHtml = data.content || '';
+      try {
+        if ((window as any).marked) {
+          contentHtml = (window as any).marked.parse(contentHtml);
+        }
+      } catch(e) { console.error(e) }
+      
+      setEl('preview-content', contentHtml, true);
+      
+      // Handle Image
+      if (data.image) {
+        const imgEl = document.getElementById('preview-image') as HTMLImageElement;
+        const containerEl = document.getElementById('preview-image-container');
+        if (imgEl && containerEl) {
+          imgEl.src = data.image;
+          containerEl.classList.remove('hidden');
+        }
+      }
+
+    } catch (e) {
+      console.error("Failed to parse preview data", e);
+    }
+  });
+</script>

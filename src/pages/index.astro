@@ -1,0 +1,722 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getAllArticles } from '../lib/articles';
+import CodeWindow from '../components/CodeWindow.astro';
+
+// Fetch live articles from Firestore database
+const allArticles = await getAllArticles();
+const latestArticles = allArticles.slice(0, 3);
+
+// Case studies according to redesign playbook
+const caseStudies = [
+  {
+    id: "workcrayon",
+    title: "WorkCrayon",
+    tagline: "All-in-one execution engine with automated milestone gating and client billing.",
+    tag: "IN PRIVATE BETA",
+    problem: "Independent studios and engineering contractors lose 6+ hours weekly to fragmented project trackers, inaccurate scope-creep calculations, and manual invoicing reconciliation.",
+    built: "Designed and engineered an end-to-end execution workspace. Features automated milestone gating, dynamic scope tracking, and integrated Stripe Connect billing with automatic invoice generation.",
+    security: "Implemented idempotent webhook verification, strict client data isolation with PostgreSQL Row-Level Security (RLS), and encrypted state storage.",
+    result: "Active private beta; reduced invoicing and reconciliation admin time by 75%.",
+    stack: ["TypeScript", "Next.js", "PostgreSQL / RLS", "Stripe Connect", "Tailwind"],
+    url: null,
+    urlLabel: null,
+  },
+  {
+    id: "primidac-network",
+    title: "Primidac Network",
+    tagline: "Authenticated private network for verified security researchers and AI engineers.",
+    tag: "ACTIVE COMMUNITY",
+    problem: "Practitioners in cyber security and AI lack a high-signal, zero-noise venue to share verified attack vectors and production agent architectures without marketing noise.",
+    built: "Built an authenticated collaborative network with cryptographic identity verification, private threat-intel feeds, and member-only architecture critiques.",
+    security: "Zero-trust token authentication, aggressive rate-limiting on all ingress endpoints, and strictly sanitized markdown rendering.",
+    result: "Verified builders and engineers exchanging production-hardened patterns.",
+    stack: ["Astro", "Cloudflare Workers", "D1 SQLite", "WebCrypto", "Tailwind"],
+    url: "https://primidacnetwork.xyz",
+    urlLabel: "Explore Network",
+  },
+  {
+    id: "agent-blake",
+    title: "Agent Blake",
+    tagline: "Deterministic multi-step AI triage assistant and workflow orchestrator.",
+    tag: "AI DEMO / LIVE",
+    problem: "Customer support and operations teams need autonomous AI triage that doesn't hallucinate or leak sensitive system prompt data.",
+    built: "Created a deterministic multi-step AI assistant that executes structured tool calls, verifies inputs against strict JSON schemas, and gracefully escalates when confidence drops.",
+    security: "Strict prompt isolation, prompt injection filtering, ephemeral session states, and zero chat data retention without explicit consent.",
+    result: "Automated 82% of routine technical triage workflows with 0 security escalations.",
+    stack: ["Python", "FastAPI", "LiteLLM", "Redis", "Docker"],
+    url: "#contact",
+    urlLabel: "Request Demo",
+  },
+];
+---
+
+<Layout
+  title="Primidac — Product Engineer · Cyber Security & AI Automation"
+  description="I'm Primidac, a product engineer building secure software and AI automations. Selected work, writing, and contact."
+>
+  <!-- 1. HERO SECTION -->
+  <section class="pt-12 sm:pt-20 pb-20 md:pb-28 border-b-hairline relative">
+    <div class="page-container">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-14 items-center">
+        
+        <!-- Left: Headline, Bio & Dual CTAs -->
+        <div class="lg:col-span-7 flex flex-col items-start">
+          <!-- Monospace Device Tag -->
+          <div class="section-tag mb-5 flex items-center gap-2">
+            <span class="text-accent font-bold">//</span>
+            <span>PRODUCT ENGINEER · SECURITY & AI</span>
+          </div>
+
+          <!-- Headline Option A with High Contrast Highlight -->
+          <h1 class="h1-display mb-6">
+            I build 
+            <span class="relative inline-block px-2 py-0.5 rounded-sm bg-accent-bg border-b-2 border-accent text-ink font-semibold">
+              secure products
+            </span> 
+            and AI automations.
+          </h1>
+
+          <!-- First-person Subline -->
+          <p class="body-editorial text-ink/80 mb-8 sm:mb-10">
+            I’m Primidac, a product engineer. I take ideas from prototype to production, harden them against real attackers, and automate the boring parts with AI. Currently building WorkCrayon and Primidac Network.
+          </p>
+
+          <!-- Dual Action Buttons -->
+          <div class="flex flex-wrap items-center gap-4 sm:gap-6">
+            <a href="#work" class="btn-primary">
+              See my work &darr;
+            </a>
+            <a href="#contact" class="link-underline font-mono text-sm tracking-wider">
+              Book a call &rarr;
+            </a>
+          </div>
+
+          <!-- Quick Proof Bar -->
+          <div class="mt-12 pt-8 border-t border-hairline flex flex-wrap gap-6 sm:gap-10 text-xs font-mono text-muted">
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-accent"></span>
+              <span>Available for select builds</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+              <span>Security-first engineering</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Real Code / Terminal Panel -->
+        <div class="lg:col-span-5 w-full">
+          <CodeWindow />
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. SELECTED WORK (CASE STUDIES) -->
+  <section id="work" class="section-padding border-b-hairline scroll-mt-20">
+    <div class="page-container">
+      
+      <!-- Section Header -->
+      <div class="max-w-2xl mb-14 sm:mb-18">
+        <div class="section-tag mb-3">
+          <span class="text-accent font-bold">// 01</span>
+          <span>SELECTED WORK</span>
+        </div>
+        <h2 class="h2-display mb-4">
+          Software shipped to production.
+        </h2>
+        <p class="body-muted">
+          Real products built from scratch with verifiable security and measurable utility.
+        </p>
+      </div>
+
+      <!-- Case Studies List -->
+      <div class="space-y-10 sm:space-y-12">
+        {caseStudies.map((project, index) => (
+          <article class="card-surface relative overflow-hidden group">
+            <div class="flex flex-col lg:flex-row lg:items-start justify-between gap-8">
+              
+              <!-- Left Column: Title, Problem, Built -->
+              <div class="lg:w-7/12 flex flex-col items-start">
+                <div class="flex items-center gap-3 mb-4">
+                  <span class="font-mono text-xs text-muted font-bold">
+                    0{index + 1}
+                  </span>
+                  <span class="mono-tag text-[10px]">
+                    {project.tag}
+                  </span>
+                </div>
+
+                <h3 class="text-2xl sm:text-3xl font-display font-semibold text-ink mb-2">
+                  {project.title}
+                </h3>
+                <p class="text-base text-ink/80 font-medium mb-6">
+                  {project.tagline}
+                </p>
+
+                <div class="space-y-5 text-[15px] sm:text-[16px] text-ink/80 leading-relaxed">
+                  <div>
+                    <span class="font-mono text-xs uppercase text-muted block mb-1.5">// Problem</span>
+                    <p>{project.problem}</p>
+                  </div>
+                  <div>
+                    <span class="font-mono text-xs uppercase text-muted block mb-1.5">// What I built</span>
+                    <p>{project.built}</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Right Column: Security Notes, Result, Stack & Link -->
+              <div class="lg:w-4/12 flex flex-col justify-between p-5 sm:p-6 bg-surface-subtle border-hairline rounded-md">
+                <div class="space-y-5">
+                  <div>
+                    <span class="font-mono text-[11px] uppercase tracking-wider text-accent font-semibold block mb-1.5">
+                      // Security & Reliability
+                    </span>
+                    <p class="text-[13.5px] font-mono text-ink/90 leading-relaxed">
+                      {project.security}
+                    </p>
+                  </div>
+
+                  <div>
+                    <span class="font-mono text-[11px] uppercase tracking-wider text-emerald-600 dark:text-emerald-400 font-semibold block mb-1.5">
+                      // Result
+                    </span>
+                    <p class="text-[13.5px] font-sans text-ink font-medium leading-relaxed">
+                      {project.result}
+                    </p>
+                  </div>
+
+                  <!-- Stack Tags -->
+                  <div>
+                    <span class="font-mono text-[11px] uppercase tracking-wider text-muted block mb-2">
+                      // Stack
+                    </span>
+                    <div class="flex flex-wrap gap-1.5">
+                      {project.stack.map(tech => (
+                        <span class="px-2 py-0.5 text-[11px] font-mono border-hairline rounded-xs text-ink/80 bg-surface">
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Action Link or Private Beta Badge -->
+                <div class="mt-6 pt-4 border-t border-hairline">
+                  {project.url ? (
+                    <a
+                      href={project.url}
+                      class="link-underline font-mono text-xs uppercase tracking-wider text-ink font-semibold flex items-center justify-between"
+                      target={project.url.startsWith('http') ? '_blank' : undefined}
+                      rel={project.url.startsWith('http') ? 'noopener noreferrer' : undefined}
+                    >
+                      <span>{project.urlLabel}</span>
+                      <span>&rarr;</span>
+                    </a>
+                  ) : (
+                    <div class="font-mono text-xs uppercase tracking-wider text-muted flex items-center justify-between">
+                      <span>Private Beta</span>
+                      <span class="text-[10px] px-2 py-0.5 border border-hairline rounded-xs bg-surface text-ink/70">Invite Only</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+            </div>
+          </article>
+        ))}
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 3. WHAT I DO (CAPABILITIES) -->
+  <section class="section-padding border-b-hairline">
+    <div class="page-container">
+      
+      <!-- Section Header -->
+      <div class="max-w-2xl mb-14">
+        <div class="section-tag mb-3">
+          <span class="text-accent font-bold">// 02</span>
+          <span>CAPABILITIES</span>
+        </div>
+        <h2 class="h2-display mb-4">
+          What I do.
+        </h2>
+        <p class="body-muted">
+          Three core technical competencies honed across prototyping, auditing, and operating systems.
+        </p>
+      </div>
+
+      <!-- 3 Plain Lines -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+        
+        <!-- 1: Product Engineering -->
+        <div class="card-surface flex flex-col justify-between">
+          <div>
+            <div class="w-10 h-10 rounded-md border-hairline flex items-center justify-center mb-6 text-ink">
+              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+              </svg>
+            </div>
+            <h3 class="text-xl font-display font-semibold text-ink mb-3">
+              Product Engineering
+            </h3>
+            <p class="text-[15px] text-ink/80 leading-relaxed mb-6">
+              Prototype to production across web and SaaS applications. Clean architectures, fast UX, and maintainable systems built with TypeScript, Next.js, Node, and PostgreSQL.
+            </p>
+          </div>
+          <div class="pt-4 border-t border-hairline font-mono text-xs text-muted">
+            React · Next.js · Astro · Node · Supabase
+          </div>
+        </div>
+
+        <!-- 2: Cyber Security -->
+        <div class="card-surface flex flex-col justify-between">
+          <div>
+            <div class="w-10 h-10 rounded-md border-hairline flex items-center justify-center mb-6 text-accent">
+              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+              </svg>
+            </div>
+            <h3 class="text-xl font-display font-semibold text-ink mb-3">
+              Cyber Security
+            </h3>
+            <p class="text-[15px] text-ink/80 leading-relaxed mb-6">
+              Threat modeling, attack surface reduction, defense-in-depth hardening, and authorized ethical security testing. Security designed into the first commit—never as an afterthought.
+            </p>
+          </div>
+          <div class="pt-4 border-t border-hairline font-mono text-xs text-muted">
+            Threat Modeling · RLS · RBAC · Ingress Defense
+          </div>
+        </div>
+
+        <!-- 3: AI Automation -->
+        <div class="card-surface flex flex-col justify-between">
+          <div>
+            <div class="w-10 h-10 rounded-md border-hairline flex items-center justify-center mb-6 text-ink">
+              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M12 8V4H8" />
+                <rect width="16" height="12" x="4" y="8" rx="2" stroke-width="1.75" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M2 14h2m16 0h2m-13-1v2m6-2v2" />
+              </svg>
+            </div>
+            <h3 class="text-xl font-display font-semibold text-ink mb-3">
+              AI Automation
+            </h3>
+            <p class="text-[15px] text-ink/80 leading-relaxed mb-6">
+              Autonomous agents and structured workflow pipelines that remove repetitive toil. Built with strict schema validation guardrails to prevent hallucination and prompt leaks.
+            </p>
+          </div>
+          <div class="pt-4 border-t border-hairline font-mono text-xs text-muted">
+            Tool Calling · JSON Schema · LLM Pipelines · Python
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. SECURITY, IN PRACTICE -->
+  <section class="section-padding border-b-hairline">
+    <div class="page-container">
+      
+      <!-- Section Header -->
+      <div class="max-w-2xl mb-14">
+        <div class="section-tag mb-3">
+          <span class="text-accent font-bold">// 03</span>
+          <span>SECURITY POSTURE</span>
+        </div>
+        <h2 class="h2-display mb-4">
+          Security, in practice.
+        </h2>
+        <p class="body-muted">
+          I don’t make unsubstantiated "Fortune 500 compliant" claims. Here are the specific, verifiable controls built into every deployment.
+        </p>
+      </div>
+
+      <!-- Controls Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        
+        <div class="p-6 card-surface">
+          <div class="font-mono text-xs text-accent font-semibold mb-2">01 // SERVER VERIFICATION</div>
+          <h4 class="text-base font-display font-semibold text-ink mb-2">
+            Never trust client data
+          </h4>
+          <p class="text-sm text-ink/80 leading-relaxed">
+            Every transaction, payment status, and user permission check is strictly verified on the server side using constant-time comparisons.
+          </p>
+        </div>
+
+        <div class="p-6 card-surface">
+          <div class="font-mono text-xs text-accent font-semibold mb-2">02 // ISOLATED SECRETS</div>
+          <h4 class="text-base font-display font-semibold text-ink mb-2">
+            Zero secrets in source
+          </h4>
+          <p class="text-sm text-ink/80 leading-relaxed">
+            API keys, signing secrets, and tokens live exclusively in encrypted environment variables and secret stores—never committed to Git.
+          </p>
+        </div>
+
+        <div class="p-6 card-surface">
+          <div class="font-mono text-xs text-accent font-semibold mb-2">03 // INGRESS DEFENSE</div>
+          <h4 class="text-base font-display font-semibold text-ink mb-2">
+            Least privilege & rate limits
+          </h4>
+          <p class="text-sm text-ink/80 leading-relaxed">
+            Granular database row-level security (RLS) ensures users cannot inspect sibling data. Endpoints enforce token-bucket rate limits against abuse.
+          </p>
+        </div>
+
+        <div class="p-6 card-surface">
+          <div class="font-mono text-xs text-accent font-semibold mb-2">04 // CI DEPENDENCY AUDITS</div>
+          <h4 class="text-base font-display font-semibold text-ink mb-2">
+            Vulnerability scanning
+          </h4>
+          <p class="text-sm text-ink/80 leading-relaxed">
+            Automated dependency vulnerability audits run inside GitHub Actions on every pull request before any production deployment is cut.
+          </p>
+        </div>
+
+        <div class="p-6 card-surface">
+          <div class="font-mono text-xs text-accent font-semibold mb-2">05 // SECURITY HEADERS</div>
+          <h4 class="text-base font-display font-semibold text-ink mb-2">
+            Hardened browser headers
+          </h4>
+          <p class="text-sm text-ink/80 leading-relaxed">
+            Strict Content-Security-Policy (CSP), HSTS, and X-Content-Type-Options headers active. Verify on <a href="https://securityheaders.com" target="_blank" rel="noopener noreferrer" class="link-underline">securityheaders.com</a>.
+          </p>
+        </div>
+
+        <div class="p-6 card-surface">
+          <div class="font-mono text-xs text-accent font-semibold mb-2">06 // DISCLOSURE POLICY</div>
+          <h4 class="text-base font-display font-semibold text-ink mb-2">
+            Responsible disclosure
+          </h4>
+          <p class="text-sm text-ink/80 leading-relaxed">
+            An RFC 9116 compliant security contact endpoint is maintained at <a href="/.well-known/security.txt" class="link-underline font-mono text-xs">/.well-known/security.txt</a>.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. HOW I WORK (METHODOLOGY) -->
+  <section class="section-padding border-b-hairline">
+    <div class="page-container">
+      
+      <!-- Section Header -->
+      <div class="max-w-2xl mb-14">
+        <div class="section-tag mb-3">
+          <span class="text-accent font-bold">// 04</span>
+          <span>METHODOLOGY</span>
+        </div>
+        <h2 class="h2-display mb-4">
+          How I work.
+        </h2>
+        <p class="body-muted">
+          Engineering standards you can inspect and verify.
+        </p>
+      </div>
+
+      <!-- 3 Checkable Practices -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+        <div class="card-surface">
+          <div class="font-mono text-xs text-muted mb-2">PRACTICE / 01</div>
+          <h3 class="text-lg font-display font-semibold text-ink mb-2">
+            Strict TypeScript
+          </h3>
+          <p class="text-sm text-ink/80 leading-relaxed">
+            Zero `any` escape hatches. All APIs, payloads, and database queries are checked with strict TypeScript compilers and Zod runtime schema validation.
+          </p>
+        </div>
+
+        <div class="card-surface">
+          <div class="font-mono text-xs text-muted mb-2">PRACTICE / 02</div>
+          <h3 class="text-lg font-display font-semibold text-ink mb-2">
+            Automated CI Pipelines
+          </h3>
+          <p class="text-sm text-ink/80 leading-relaxed">
+            Every pull request triggers automated unit and integration suites. If tests fail or linting reports errors, code cannot be deployed.
+          </p>
+        </div>
+
+        <div class="card-surface">
+          <div class="font-mono text-xs text-muted mb-2">PRACTICE / 03</div>
+          <h3 class="text-lg font-display font-semibold text-ink mb-2">
+            Performance by Default
+          </h3>
+          <p class="text-sm text-ink/80 leading-relaxed">
+            Lightweight, clean HTML and minimal clientside JavaScript. This site runs with 98+ Core Web Vitals and sub-second Time To First Byte.
+          </p>
+        </div>
+      </div>
+
+      <!-- 3-Step Execution Strip -->
+      <div class="card-surface bg-surface-subtle">
+        <div class="font-mono text-xs text-accent font-semibold mb-6">
+          // EXECUTION STRIP
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div class="border-l-2 border-accent pl-4">
+            <span class="font-mono text-xs text-muted font-bold block mb-1">01 // UNDERSTAND</span>
+            <h4 class="font-display font-semibold text-ink text-base mb-1">Map & Deconstruct</h4>
+            <p class="text-xs text-ink/80 leading-relaxed">Define exact problem boundaries, data flow, and threat model before writing any code.</p>
+          </div>
+          <div class="border-l-2 border-accent pl-4">
+            <span class="font-mono text-xs text-muted font-bold block mb-1">02 // BUILD</span>
+            <h4 class="font-display font-semibold text-ink text-base mb-1">Architect & Execute</h4>
+            <p class="text-xs text-ink/80 leading-relaxed">Ship modular, type-safe components and clean API services that solve the core requirement.</p>
+          </div>
+          <div class="border-l-2 border-accent pl-4">
+            <span class="font-mono text-xs text-muted font-bold block mb-1">03 // HARDEN & SHIP</span>
+            <h4 class="font-display font-semibold text-ink text-base mb-1">Audit & Automate</h4>
+            <p class="text-xs text-ink/80 leading-relaxed">Conduct security verification, optimize response times, and establish continuous monitoring.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 6. WRITING (NOTES & ARTICLES) -->
+  <section class="section-padding border-b-hairline">
+    <div class="page-container">
+      
+      <!-- Section Header -->
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-14">
+        <div>
+          <div class="section-tag mb-3">
+            <span class="text-accent font-bold">// 05</span>
+            <span>WRITING & NOTES</span>
+          </div>
+          <h2 class="h2-display mb-2">
+            Selected notes.
+          </h2>
+          <p class="body-muted">
+            Thoughts on engineering simplicity, cyber security, and autonomous pipelines.
+          </p>
+        </div>
+        <a href="/writing" class="link-underline font-mono text-xs tracking-wider uppercase text-ink font-semibold">
+          All articles &rarr;
+        </a>
+      </div>
+
+      <!-- Articles Grid -->
+      {latestArticles.length > 0 ? (
+        <div class={`grid grid-cols-1 ${latestArticles.length === 1 ? 'max-w-2xl' : latestArticles.length === 2 ? 'md:grid-cols-2' : 'md:grid-cols-3'} gap-6`}>
+          {latestArticles.map((article) => (
+            <a
+              href={`/writing/${article.slug}`}
+              class="card-surface group flex flex-col justify-between hover:border-ink/30"
+            >
+              <div>
+                <div class="flex items-center justify-between text-xs font-mono text-muted mb-4">
+                  <span class="mono-tag text-[10px]">{article.category}</span>
+                  <span>{article.publishedAt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                </div>
+                <h3 class="text-lg font-display font-semibold text-ink mb-3 group-hover:text-accent transition-colors line-clamp-2">
+                  {article.title}
+                </h3>
+                <p class="text-sm text-ink/80 leading-relaxed mb-6 line-clamp-3">
+                  {article.description}
+                </p>
+              </div>
+              <div class="pt-4 border-t border-hairline flex items-center justify-between text-xs font-mono text-ink font-semibold">
+                <span>Read note</span>
+                <span class="group-hover:translate-x-1 transition-transform">&rarr;</span>
+              </div>
+            </a>
+          ))}
+        </div>
+      ) : (
+        <div class="p-8 border border-hairline rounded-lg text-center bg-surface-subtle">
+          <p class="font-mono text-sm text-muted">No notes published yet.</p>
+        </div>
+      )}
+
+    </div>
+  </section>
+
+  <!-- 7. ABOUT SECTION (PHOTO ON LEFT, THREE SENTENCES ON RIGHT) -->
+  <section id="about" class="section-padding border-b-hairline scroll-mt-20">
+    <div class="page-container">
+      
+      <!-- Section Tag -->
+      <div class="section-tag mb-8">
+        <span class="text-accent font-bold">// 06</span>
+        <span>ABOUT</span>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+        
+        <!-- Left: Photo in clean minimal frame -->
+        <div class="lg:col-span-5">
+          <div class="relative w-full max-w-md mx-auto aspect-square rounded-lg overflow-hidden border-hairline shadow-subtle bg-surface-subtle">
+            <img
+              src="/images/founder.jpg"
+              alt="Primidac — Product Engineer"
+              class="w-full h-full object-cover grayscale contrast-110 hover:grayscale-0 transition-all duration-500"
+              loading="lazy"
+            />
+          </div>
+        </div>
+
+        <!-- Right: Three sentences and three facts -->
+        <div class="lg:col-span-7 flex flex-col items-start">
+          <h2 class="h2-display mb-6">
+            I’m Primidac, a product engineer.
+          </h2>
+
+          <div class="space-y-4 body-editorial text-ink/85 mb-8">
+            <p>
+              I build software end to end and care about two things most teams treat as afterthoughts: security and automation.
+            </p>
+            <p>
+              I ship my own products at Primidac Labs and run Primidac Network, a community of security and AI builders.
+            </p>
+            <p>
+              My focus is delivering robust, hardened systems that run cleanly in production without constant operational emergencies.
+            </p>
+          </div>
+
+          <!-- Three Facts -->
+          <div class="w-full p-6 bg-surface-subtle border-hairline rounded-lg grid grid-cols-1 sm:grid-cols-3 gap-6 text-left">
+            <div>
+              <span class="font-mono text-xs text-muted uppercase block mb-1">// Experience</span>
+              <span class="text-sm font-display font-semibold text-ink">10+ Years</span>
+              <p class="text-xs text-muted mt-0.5">Shipping secure software since 2015</p>
+            </div>
+            <div>
+              <span class="font-mono text-xs text-muted uppercase block mb-1">// Main Stack</span>
+              <span class="text-sm font-display font-semibold text-ink">TypeScript, Python & Go</span>
+              <p class="text-xs text-muted mt-0.5">Postgres (RLS), FastAPI, Docker, Cloudflare</p>
+            </div>
+            <div>
+              <span class="font-mono text-xs text-muted uppercase block mb-1">// Proof</span>
+              <span class="text-sm font-display font-semibold text-ink">Shipped Products</span>
+              <p class="text-xs text-muted mt-0.5">WorkCrayon, Network, Agent Blake</p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. CONTACT SECTION (ONE EMAIL, CALENDLY LINK, MINIMAL 3-FIELD FORM) -->
+  <section id="contact" class="section-padding scroll-mt-20">
+    <div class="page-container">
+      
+      <div class="max-w-2xl mb-12">
+        <div class="section-tag mb-3">
+          <span class="text-accent font-bold">// 07</span>
+          <span>CONTACT</span>
+        </div>
+        <h2 class="h2-display mb-4">
+          Let’s talk about your product.
+        </h2>
+        <p class="body-muted">
+          Available for product engineering advisory, security audits, and select build engagements.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14">
+        
+        <!-- Left: Direct Details & Book a Call -->
+        <div class="lg:col-span-5 flex flex-col justify-between space-y-8">
+          <div>
+            <h3 class="font-display font-semibold text-lg text-ink mb-4">
+              Direct Channels
+            </h3>
+            <div class="space-y-4 font-mono text-sm">
+              <div>
+                <span class="text-xs text-muted block mb-1">// EMAIL</span>
+                <a href="mailto:hello@primidac.com" class="link-underline text-ink text-base">
+                  hello@primidac.com
+                </a>
+              </div>
+              <div>
+                <span class="text-xs text-muted block mb-1">// ADVISORY CALL</span>
+                <a href="https://calendly.com" target="_blank" rel="noopener noreferrer" class="link-underline text-ink text-base">
+                  Schedule 30-min architecture call &rarr;
+                </a>
+              </div>
+              <div>
+                <span class="text-xs text-muted block mb-1">// SECURITY REPORTS</span>
+                <a href="mailto:security@primidac.com" class="link-underline text-ink">
+                  security@primidac.com
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- PGP or Security Note -->
+          <div class="p-5 bg-surface border-hairline rounded-md text-xs font-mono text-muted">
+            <span class="text-accent font-bold">// DISCLOSURE</span><br />
+            Encrypted disclosures welcome. All inquiries answered within 24 business hours.
+          </div>
+        </div>
+
+        <!-- Right: Minimal 3-Field Message Form -->
+        <div class="lg:col-span-7">
+          <form class="card-surface space-y-6" action="mailto:hello@primidac.com" method="GET">
+            <div>
+              <label for="contact-name" class="block text-xs font-mono uppercase tracking-wider text-muted mb-2">
+                Your Name
+              </label>
+              <input
+                type="text"
+                id="contact-name"
+                name="name"
+                required
+                placeholder="Jane Smith"
+                class="w-full px-4 py-3 bg-surface border-hairline rounded-md font-sans text-sm text-ink placeholder:text-muted/60 focus:outline-none focus:border-accent"
+              />
+            </div>
+
+            <div>
+              <label for="contact-email" class="block text-xs font-mono uppercase tracking-wider text-muted mb-2">
+                Email Address
+              </label>
+              <input
+                type="email"
+                id="contact-email"
+                name="email"
+                required
+                placeholder="jane@company.com"
+                class="w-full px-4 py-3 bg-surface border-hairline rounded-md font-sans text-sm text-ink placeholder:text-muted/60 focus:outline-none focus:border-accent"
+              />
+            </div>
+
+            <div>
+              <label for="contact-message" class="block text-xs font-mono uppercase tracking-wider text-muted mb-2">
+                What are you building?
+              </label>
+              <textarea
+                id="contact-message"
+                name="body"
+                rows="4"
+                required
+                placeholder="Tell me about your product, your security requirements, or your automation needs..."
+                class="w-full px-4 py-3 bg-surface border-hairline rounded-md font-sans text-sm text-ink placeholder:text-muted/60 focus:outline-none focus:border-accent resize-none"
+              ></textarea>
+            </div>
+
+            <button type="submit" class="btn-primary w-full sm:w-auto">
+              Send Message &rarr;
+            </button>
+          </form>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+</Layout>

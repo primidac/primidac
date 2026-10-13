@@ -1,0 +1,232 @@
+/* ============================================================
+   Primidac — Minimalist Engineering Design System
+   ============================================================ */
+
+:root {
+  /* Core Playbook Tokens (Light Mode - Cream Paper & Ink) */
+  --paper: #F4F1EA;
+  --surface: #FFFFFF;
+  --surface-subtle: #ECE8DD;
+  --ink: #161616;
+  --muted: #66665F;
+  --hairline: rgba(22, 22, 22, 0.12);
+  --accent: #E8788A; /* Coral fill and underlines only */
+  --accent-bg: rgba(232, 120, 138, 0.15);
+  --radius: 12px;
+  --space: 8px;
+
+  /* Typography */
+  --font-sans: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-display: 'Outfit', 'Manrope', sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+
+  /* Compatibility bindings */
+  --brand-primary: var(--accent);
+  --surface-base: var(--paper);
+  --surface-elevated: var(--surface);
+  --border-subtle: var(--hairline);
+  --text-primary: var(--ink);
+  --text-secondary: var(--muted);
+
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #121212;
+    --surface: #1A1A1A;
+    --surface-subtle: #242424;
+    --ink: #F4F1EA;
+    --muted: #B0B0A8;
+    --hairline: rgba(244, 241, 234, 0.14);
+    --accent: #E8788A;
+    --accent-bg: rgba(232, 120, 138, 0.22);
+    color-scheme: dark;
+  }
+}
+
+.dark {
+  --paper: #121212;
+  --surface: #1A1A1A;
+  --surface-subtle: #242424;
+  --ink: #F4F1EA;
+  --muted: #B0B0A8;
+  --hairline: rgba(244, 241, 234, 0.14);
+  --accent: #E8788A;
+  --accent-bg: rgba(232, 120, 138, 0.22);
+  color-scheme: dark;
+}
+
+/* Base resets & typography */
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--paper);
+  color: var(--ink);
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--paper);
+  color: var(--ink);
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Selection */
+::selection {
+  background: var(--accent);
+  color: var(--ink);
+}
+
+/* Fluid Typography Sizes */
+.size-display-hero {
+  font-size: clamp(2.5rem, 6vw + 1rem, 6rem);
+}
+
+.size-heading-xl {
+  font-size: clamp(2rem, 4vw + 0.5rem, 3.25rem);
+}
+
+.size-heading-lg {
+  font-size: clamp(1.5rem, 2.5vw + 0.25rem, 2.25rem);
+}
+
+.size-heading-md {
+  font-size: clamp(1.25rem, 1.5vw + 0.25rem, 1.65rem);
+}
+
+/* Editorial layout utilities */
+.structural-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1.5rem;
+}
+
+/* Reduced Motion Override */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================================
+   Typography & Prose Dual-Mode Contrast Overrides
+   ============================================================ */
+.prose {
+  color: var(--ink) !important;
+  max-width: 100%;
+}
+
+.prose :where(p, li, dd, dt, figcaption, table, th, td) {
+  color: var(--ink);
+  opacity: 0.88;
+  line-height: 1.8;
+}
+
+.prose :where(strong, b) {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.prose :where(h1, h2, h3, h4, h5, h6) {
+  color: var(--ink) !important;
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.prose :where(h1) {
+  font-size: 2rem;
+  margin-top: 2.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.prose :where(h2) {
+  font-size: 1.5rem;
+  margin-top: 2.25rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.prose :where(h3) {
+  font-size: 1.25rem;
+  margin-top: 1.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.prose :where(a) {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-underline-offset: 4px;
+  font-weight: 500;
+  transition: color 0.15s ease;
+}
+
+.prose :where(a:hover) {
+  color: var(--accent);
+}
+
+.prose :where(code):not(pre code) {
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  background-color: var(--surface-subtle);
+  color: var(--ink);
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+  border: 1px solid var(--hairline);
+}
+
+.prose :where(pre) {
+  background-color: var(--surface-subtle) !important;
+  color: var(--ink) !important;
+  border: 1px solid var(--hairline);
+  border-radius: 8px;
+  padding: 1.25rem;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+}
+
+.prose :where(pre code) {
+  background: transparent !important;
+  color: inherit !important;
+  padding: 0;
+  border: none;
+}
+
+.prose :where(blockquote) {
+  border-left: 3px solid var(--accent);
+  padding-left: 1.25rem;
+  font-style: italic;
+  color: var(--muted);
+  margin: 1.5rem 0;
+}
+
+.prose :where(hr) {
+  border: 0;
+  border-top: 1px solid var(--hairline);
+  margin: 2.5rem 0;
+}
+
+.prose :where(ul) {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+  margin: 1.25rem 0;
+}
+
+.prose :where(ol) {
+  list-style-type: decimal;
+  padding-left: 1.5rem;
+  margin: 1.25rem 0;
+}

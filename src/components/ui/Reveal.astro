@@ -1,0 +1,25 @@
+---
+interface Props {
+  animation?: 'fade-up' | 'fade-in' | 'slide-left' | 'slide-right' | 'scale';
+  delay?: number;
+  duration?: number;
+  class?: string;
+}
+
+const {
+  animation = 'fade-up',
+  delay = 0,
+  duration = 0.7,
+  class: className,
+} = Astro.props;
+---
+
+<div
+  data-reveal={animation}
+  data-reveal-delay={delay > 0 ? String(delay) : undefined}
+  data-reveal-duration={duration !== 0.7 ? String(duration) : undefined}
+  class:list={['will-change-transform', className]}
+  style="opacity: 0;"
+>
+  <slot />
+</div>

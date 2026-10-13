@@ -1,0 +1,69 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getAllArticles, type ArticleItem } from '../../lib/articles';
+import { marked } from 'marked';
+
+export async function getStaticPaths() {
+  const articles = await getAllArticles();
+  return articles.map(article => ({
+    params: { slug: article.slug },
+    props: { article },
+  }));
+}
+
+interface Props {
+  article: ArticleItem;
+}
+
+const { article } = Astro.props;
+const htmlContent = marked.parse(article.content || '');
+---
+
+<Layout
+  title={`${article.title} — Primidac`}
+  description={article.description}
+>
+  <article class="page-container py-16 sm:py-24 max-w-[780px] mx-auto">
+    <a href="/writing" class="inline-flex items-center gap-2 font-mono text-xs text-muted hover:text-ink mb-10 transition-colors">
+      &larr; Back to Writing
+    </a>
+    
+    <header class="mb-12 pb-8 border-b-hairline">
+      <div class="flex items-center gap-3 font-mono text-xs text-muted mb-4">
+        <span class="mono-tag text-[10px]">{article.category}</span>
+        <span>&bull;</span>
+        <span>{article.publishedAt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+        <span>&bull;</span>
+        <span>{article.readTime} Min Read</span>
+      </div>
+      <h1 class="h1-display text-3xl sm:text-4xl md:text-5xl text-ink mb-5">
+        {article.title}
+      </h1>
+      {article.description && (
+        <p class="body-editorial text-ink/80 text-lg leading-relaxed">
+          {article.description}
+        </p>
+      )}
+
+      {article.coverImage && (
+        <div class="mt-8 rounded-lg overflow-hidden border-hairline bg-surface-subtle">
+          <img src={article.coverImage} alt={article.title} class="w-full h-auto max-h-[460px] object-cover" />
+        </div>
+      )}
+    </header>
+
+    <div class="prose max-w-none text-[16.5px] leading-relaxed">
+      <div set:html={htmlContent} />
+    </div>
+
+    <div class="mt-16 pt-8 border-t-hairline flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div>
+        <div class="font-display font-semibold text-ink text-base">Primidac</div>
+        <div class="font-mono text-xs text-muted">Product Engineer · Security & AI</div>
+      </div>
+      <a href="/writing" class="font-mono text-xs text-accent hover:underline flex items-center gap-1.5">
+        &larr; Read more technical notes
+      </a>
+    </div>
+  </article>
+</Layout>

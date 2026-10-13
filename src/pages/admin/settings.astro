@@ -1,0 +1,137 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+---
+
+<AdminLayout title="Global Settings">
+  <div class="h-full flex flex-col">
+    <!-- Header -->
+    <div class="p-6 md:p-8 border-b border-neutral-200 bg-white shrink-0">
+      <h1 class="text-2xl font-bold font-sans text-neutral-900 tracking-tight">Global Settings</h1>
+      <p class="text-sm font-mono text-neutral-500 mt-1">Manage site configuration and variables.</p>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="flex-1 bg-white overflow-auto p-6 md:p-8">
+      <div class="max-w-3xl bg-white border border-neutral-200 p-6 md:p-8">
+        
+        <form id="settings-form" class="space-y-8">
+          
+          <!-- Contact Settings -->
+          <div>
+            <h2 class="text-sm font-bold font-sans text-neutral-900 uppercase tracking-wider border-b border-neutral-100 pb-2 mb-4">Contact Information</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label class="block text-[10px] font-mono text-neutral-500 uppercase tracking-widest mb-2">Primary Email</label>
+                <input type="email" id="set-email" class="w-full bg-white border border-neutral-200 px-4 py-3 text-sm focus:border-brand-primary focus:outline-none transition-all">
+              </div>
+              <div>
+                <label class="block text-[10px] font-mono text-neutral-500 uppercase tracking-widest mb-2">Support Email</label>
+                <input type="email" id="set-support-email" class="w-full bg-white border border-neutral-200 px-4 py-3 text-sm focus:border-brand-primary focus:outline-none transition-all">
+              </div>
+            </div>
+          </div>
+
+          <!-- Announcement Banner -->
+          <div>
+            <h2 class="text-sm font-bold font-sans text-neutral-900 uppercase tracking-wider border-b border-neutral-100 pb-2 mb-4">Announcement Banner</h2>
+            <div class="space-y-4">
+              <label class="flex items-center gap-3 cursor-pointer">
+                <input type="checkbox" id="set-banner-active" class="w-4 h-4 text-brand-primary border-neutral-200 rounded focus:ring-brand-primary cursor-pointer">
+                <span class="text-sm font-mono text-neutral-700">Enable Banner</span>
+              </label>
+              <div>
+                <label class="block text-[10px] font-mono text-neutral-500 uppercase tracking-widest mb-2">Banner Text</label>
+                <input type="text" id="set-banner-text" placeholder="e.g. We are currently accepting new clients for Q4." class="w-full bg-white border border-neutral-200 px-4 py-3 text-sm focus:border-brand-primary focus:outline-none transition-all">
+              </div>
+            </div>
+          </div>
+
+          <!-- System Settings -->
+          <div>
+            <h2 class="text-sm font-bold font-sans text-neutral-900 uppercase tracking-wider border-b border-neutral-100 pb-2 mb-4">System Settings</h2>
+            <div class="space-y-4">
+              <label class="flex items-center gap-3 cursor-pointer">
+                <input type="checkbox" id="set-maintenance" class="w-4 h-4 text-brand-primary border-neutral-200 rounded focus:ring-brand-primary cursor-pointer">
+                <span class="text-sm font-mono text-neutral-700">Maintenance Mode (Hide public site)</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="pt-4 flex items-center gap-4 border-t border-neutral-100">
+            <button type="submit" id="btn-save" class="btn-primary py-2 px-8">Save Changes</button>
+            <span id="save-status" class="text-sm font-mono text-green-600 hidden flex items-center gap-2">
+              <span class="i-lucide-check-circle w-4 h-4"></span> Saved successfully
+            </span>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    import { doc, getDoc, setDoc } from "firebase/firestore";
+    import { db } from "../../lib/firebase";
+
+    const form = document.getElementById('settings-form');
+    const fEmail = document.getElementById('set-email') as HTMLInputElement;
+    const fSupportEmail = document.getElementById('set-support-email') as HTMLInputElement;
+    const fBannerActive = document.getElementById('set-banner-active') as HTMLInputElement;
+    const fBannerText = document.getElementById('set-banner-text') as HTMLInputElement;
+    const fMaintenance = document.getElementById('set-maintenance') as HTMLInputElement;
+    const btnSave = document.getElementById('btn-save') as HTMLButtonElement;
+    const saveStatus = document.getElementById('save-status');
+
+    async function loadSettings() {
+      try {
+        const docRef = doc(db, "settings", "global");
+        const docSnap = await getDoc(docRef);
+        
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          if(fEmail) fEmail.value = data.contactEmail || '';
+          if(fSupportEmail) fSupportEmail.value = data.supportEmail || '';
+          if(fBannerActive) fBannerActive.checked = data.bannerActive || false;
+          if(fBannerText) fBannerText.value = data.bannerText || '';
+          if(fMaintenance) fMaintenance.checked = data.maintenanceMode || false;
+        }
+      } catch (err) {
+        console.error("Error loading settings:", err);
+      }
+    }
+
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const originalText = btnSave.innerText;
+      btnSave.innerText = "Saving...";
+      btnSave.disabled = true;
+      saveStatus?.classList.add('hidden');
+
+      try {
+        await setDoc(doc(db, "settings", "global"), {
+          contactEmail: fEmail.value,
+          supportEmail: fSupportEmail.value,
+          bannerActive: fBannerActive.checked,
+          bannerText: fBannerText.value,
+          maintenanceMode: fMaintenance.checked,
+          updatedAt: new Date().toISOString()
+        }, { merge: true });
+
+        saveStatus?.classList.remove('hidden');
+        setTimeout(() => {
+          saveStatus?.classList.add('hidden');
+        }, 3000);
+
+      } catch (err) {
+        console.error("Error saving settings:", err);
+        window.showToast("Failed to save settings.", "error");
+      } finally {
+        btnSave.innerText = originalText;
+        btnSave.disabled = false;
+      }
+    });
+
+    loadSettings();
+  </script>
+</AdminLayout>

@@ -1,0 +1,163 @@
+---
+// HeroVisual.astro
+---
+
+<div class="relative w-full h-[500px] lg:h-[700px] select-none pointer-events-none">
+  <!-- 
+    The container is relative, and we allow the SVG to overflow.
+    This creates the requested "cropped/bleeding" effect off the right side.
+  -->
+  <svg 
+    viewBox="0 0 1000 800" 
+    class="absolute top-1/2 left-1/2 -translate-x-[40%] -translate-y-[45%] w-[120%] lg:w-[150%] max-w-none overflow-visible"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <defs>
+      <!-- Drop Shadow for Dimensional Layers -->
+      <filter id="shadow-sm" x="-20%" y="-20%" width="140%" height="140%">
+        <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.06"/>
+      </filter>
+      <filter id="shadow-md" x="-20%" y="-20%" width="140%" height="140%">
+        <feDropShadow dx="-10" dy="20" stdDeviation="25" flood-color="#000000" flood-opacity="0.08"/>
+      </filter>
+      <filter id="shadow-contact" x="-10%" y="-10%" width="120%" height="120%">
+        <feDropShadow dx="-2" dy="4" stdDeviation="4" flood-color="#000000" flood-opacity="0.12"/>
+      </filter>
+      
+      <!-- Isometric Grid Pattern -->
+      <pattern id="iso-grid" width="40" height="40" patternUnits="userSpaceOnUse">
+        <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#E4E4E7" stroke-width="1"/>
+      </pattern>
+
+      <!-- Gradients -->
+      <linearGradient id="metal-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#FFFFFF"/>
+        <stop offset="100%" stop-color="#F4F4F5"/>
+      </linearGradient>
+      
+      <linearGradient id="dark-metal-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#3F3F46"/>
+        <stop offset="100%" stop-color="#27272A"/>
+      </linearGradient>
+
+      <!-- Data Flow Animation Path -->
+      <linearGradient id="flow-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#1B50F9" stop-opacity="0"/>
+        <stop offset="50%" stop-color="#1B50F9" stop-opacity="1"/>
+        <stop offset="100%" stop-color="#1B50F9" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+
+    <!-- 
+      MASTER ISOMETRIC GROUP 
+      Transforms standard 2D top-down coordinates into an isometric projection.
+    -->
+    <g transform="translate(500, 200) scale(1, 0.577) rotate(-45)">
+      
+      <!-- ========================================== -->
+      <!-- LAYER 1: BASE SYSTEM / SOFTWARE GRID       -->
+      <!-- ========================================== -->
+      <g id="layer-software">
+        <!-- Base ambient grid -->
+        <rect x="-300" y="-300" width="800" height="800" fill="url(#iso-grid)" opacity="0.5" />
+        
+        <!-- Large Software Platform Plane -->
+        <rect x="-100" y="-100" width="500" height="400" fill="#FFFFFF" filter="url(#shadow-sm)" />
+        <rect x="-100" y="-100" width="500" height="400" fill="none" stroke="#E4E4E7" stroke-width="2" />
+        
+        <!-- Logical Blocks (Software processing queues) -->
+        <rect x="-50" y="-50" width="200" height="60" fill="#F4F4F5" stroke="#D4D4D8" stroke-width="1" />
+        <rect x="-50" y="30" width="200" height="60" fill="#F4F4F5" stroke="#D4D4D8" stroke-width="1" />
+        <rect x="-50" y="110" width="200" height="60" fill="#F4F4F5" stroke="#D4D4D8" stroke-width="1" />
+        
+        <!-- Code / Data streams (abstract) -->
+        <path d="M 180 -20 L 350 -20 M 180 0 L 300 0 M 180 20 L 250 20" stroke="#D4D4D8" stroke-width="4" stroke-dasharray="10 5" />
+        <path d="M 180 60 L 320 60 M 180 80 L 280 80" stroke="#D4D4D8" stroke-width="4" stroke-dasharray="8 6" />
+        
+        <!-- System Label -->
+        <text x="350" y="270" transform="rotate(90 350 270)" font-family="'IBM Plex Mono', monospace" font-size="14" fill="#A1A1AA" font-weight="600" letter-spacing="4">SYSTEM KERNEL</text>
+      </g>
+
+      <!-- ========================================== -->
+      <!-- DATA CONNECTIONS (Bridging Hardware & SW)  -->
+      <!-- ========================================== -->
+      <g id="layer-data">
+        <!-- Connecting traces from Hardware (elevated) down to Software (base) -->
+        <path d="M 100 250 L 100 110 L -50 110" fill="none" stroke="#E4E4E7" stroke-width="4" />
+        <path d="M 120 250 L 120 80 L -50 80" fill="none" stroke="#E4E4E7" stroke-width="4" />
+        <path d="M 140 250 L 140 50 L -50 50" fill="none" stroke="#E4E4E7" stroke-width="4" />
+        
+        <!-- Active Blue Signal -->
+        <path d="M 120 250 L 120 80 L -50 80" fill="none" stroke="#1B50F9" stroke-width="2" class="animate-[dash_3s_linear_infinite]" stroke-dasharray="20 100" />
+      </g>
+
+      <!-- ========================================== -->
+      <!-- LAYER 2: PRIMARY HARDWARE OBJECT           -->
+      <!-- ========================================== -->
+      <!-- 
+        This object is translated slightly to give it vertical elevation in the isometric view 
+        (In this projection, moving diagonally (-Y, -X) simulates Z-axis elevation).
+      -->
+      <g id="layer-hardware" transform="translate(60, 200)" filter="url(#shadow-md)">
+        
+        <!-- Base Chassis -->
+        <rect x="0" y="0" width="280" height="280" fill="url(#metal-grad)" stroke="#D4D4D8" stroke-width="2" rx="8" />
+        
+        <!-- Inner PCB Substrate -->
+        <rect x="15" y="15" width="250" height="250" fill="#18181B" rx="4" />
+        
+        <!-- Edge Connectors / IO Ports -->
+        <g fill="#D4D4D8">
+          <rect x="-5" y="40" width="10" height="30" rx="2" />
+          <rect x="-5" y="90" width="10" height="30" rx="2" />
+          <rect x="-5" y="140" width="10" height="30" rx="2" />
+          <rect x="-5" y="190" width="10" height="30" rx="2" />
+        </g>
+
+        <!-- Complex Circuit Traces on PCB -->
+        <path d="M 40 40 L 100 40 L 120 60 L 120 100" fill="none" stroke="#3F3F46" stroke-width="2" />
+        <path d="M 40 60 L 80 60 L 100 80 L 100 100" fill="none" stroke="#3F3F46" stroke-width="2" />
+        <path d="M 240 40 L 180 40 L 160 60 L 160 100" fill="none" stroke="#3F3F46" stroke-width="2" />
+        <path d="M 240 240 L 140 240 L 140 180" fill="none" stroke="#1B50F9" stroke-width="2" />
+        
+        <!-- Processor / Main Compute Unit (Focal Point) -->
+        <g transform="translate(90, 90)">
+          <!-- Processor Base -->
+          <rect x="0" y="0" width="100" height="100" fill="url(#dark-metal-grad)" rx="4" filter="url(#shadow-contact)" />
+          
+          <!-- Heatsink Fins -->
+          <g fill="#18181B">
+            <rect x="10" y="10" width="80" height="4" />
+            <rect x="10" y="20" width="80" height="4" />
+            <rect x="10" y="30" width="80" height="4" />
+            <rect x="10" y="40" width="80" height="4" />
+            <rect x="10" y="50" width="80" height="4" />
+            <rect x="10" y="60" width="80" height="4" />
+            <rect x="10" y="70" width="80" height="4" />
+            <rect x="10" y="80" width="80" height="4" />
+          </g>
+          
+          <!-- Core Chip Indicator -->
+          <rect x="35" y="35" width="30" height="30" fill="#0432BB" />
+          <circle cx="50" cy="50" r="4" fill="#1B50F9" class="animate-pulse" />
+        </g>
+        
+        <!-- Memory / Auxiliary Modules -->
+        <rect x="40" y="110" width="30" height="60" fill="#27272A" rx="2" filter="url(#shadow-contact)" />
+        <rect x="210" y="110" width="30" height="60" fill="#27272A" rx="2" filter="url(#shadow-contact)" />
+        
+        <!-- Small Technical Annotations (Isometric text) -->
+        <text x="20" y="260" font-family="'IBM Plex Mono', monospace" font-size="10" fill="#71717A" font-weight="600" letter-spacing="2">HW-REV-04</text>
+        <text x="210" y="260" font-family="'IBM Plex Mono', monospace" font-size="10" fill="#71717A" font-weight="600" letter-spacing="2">PHYSICAL</text>
+      </g>
+      
+    </g>
+  </svg>
+</div>
+
+<style>
+  @keyframes dash {
+    from { stroke-dashoffset: 120; }
+    to { stroke-dashoffset: 0; }
+  }
+</style>

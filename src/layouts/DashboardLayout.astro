@@ -1,0 +1,157 @@
+---
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+const currentPath = Astro.url.pathname;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="robots" content="noindex, nofollow" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <title>{title} — Primidac Workspace</title>
+  </head>
+  <body class="bg-surface-base font-sans antialiased text-neutral-900 min-h-screen flex flex-col h-screen overflow-hidden">
+    
+    <!-- Ambient Glow (from mock UI) -->
+    <div class="absolute top-0 right-0 w-[400px] h-[400px] bg-brand-primary/5 blur-[100px] rounded-full -translate-y-1/2 translate-x-1/3 pointer-events-none z-0"></div>
+
+    <!-- Top Bar -->
+    <header class="h-14 border-b border-neutral-200 bg-white/80 backdrop-blur-md flex items-center px-4 md:px-6 justify-between relative z-20 shrink-0">
+      
+      <div class="flex items-center gap-4">
+        <!-- Mobile Menu Toggle -->
+        <button id="dashboard-mobile-toggle" class="md:hidden text-neutral-500 hover:text-brand-primary transition-colors">
+          <span class="i-lucide-menu w-5 h-5"></span>
+        </button>
+        
+        <a href="/" class="flex items-center gap-2">
+          <div class="bg-brand-primary px-3 py-1 -skew-x-[15deg] flex items-center justify-center">
+            <span class="font-tech text-white text-[12px] skew-x-[15deg] tracking-widest uppercase">
+              <span class="font-black">Pri</span>midac
+            </span>
+          </div>
+        </a>
+      </div>
+
+      <div class="text-[10px] font-mono text-neutral-500 uppercase tracking-widest hidden md:flex items-center gap-2 absolute left-1/2 -translate-x-1/2">
+        <span class="i-lucide-box w-3 h-3"></span>
+        Workspace / Client
+      </div>
+
+      <div class="flex items-center gap-4">
+        <div class="text-xs text-neutral-900 font-medium hidden sm:block" id="user-email-display">Loading...</div>
+        <div id="user-avatar" class="w-8 h-8 rounded-full bg-neutral-100 overflow-hidden border border-neutral-200 shadow-sm flex items-center justify-center">
+          <span class="i-lucide-user w-4 h-4 text-neutral-400"></span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Body Layout -->
+    <div class="flex flex-1 overflow-hidden relative z-10">
+      
+      <!-- Mobile Sidebar Overlay -->
+      <div id="dashboard-mobile-overlay" class="fixed inset-0 bg-neutral-900/50 z-30 hidden md:hidden backdrop-blur-sm transition-opacity opacity-0"></div>
+
+      <!-- Sidebar -->
+      <aside id="dashboard-sidebar" class="w-16 sm:w-20 border-r border-neutral-200 bg-neutral-50/80 backdrop-blur-md flex flex-col items-center py-6 gap-6 absolute inset-y-0 left-0 z-40 transform -translate-x-full md:translate-x-0 md:relative transition-transform duration-300 ease-in-out shrink-0">
+        
+        <a href="/dashboard" class={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 relative group ${currentPath === '/dashboard' || currentPath === '/dashboard/' ? 'bg-brand-primary/10 text-brand-primary border border-brand-primary/20 shadow-[0_0_15px_rgba(27,80,249,0.15)]' : 'bg-transparent text-neutral-500 hover:bg-white hover:border-neutral-200 border border-transparent hover:shadow-sm hover:text-brand-primary'}`} title="Tools Marketplace">
+          <span class="i-lucide-layout-grid w-5 h-5"></span>
+          <div class="absolute left-14 bg-neutral-900 text-white text-[10px] font-mono uppercase tracking-widest px-2 py-1 rounded opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity whitespace-nowrap">Marketplace</div>
+        </a>
+
+        <a href="/dashboard/active" class={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 relative group ${currentPath.includes('/dashboard/active') ? 'bg-brand-primary/10 text-brand-primary border border-brand-primary/20 shadow-[0_0_15px_rgba(27,80,249,0.15)]' : 'bg-transparent text-neutral-500 hover:bg-white hover:border-neutral-200 border border-transparent hover:shadow-sm hover:text-brand-primary'}`} title="Active Tools">
+          <span class="i-lucide-activity w-5 h-5"></span>
+          <div class="absolute left-14 bg-neutral-900 text-white text-[10px] font-mono uppercase tracking-widest px-2 py-1 rounded opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity whitespace-nowrap">Active Tools</div>
+        </a>
+
+        <a href="/dashboard/settings" class={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 relative group mt-auto ${currentPath.includes('/dashboard/settings') ? 'bg-brand-primary/10 text-brand-primary border border-brand-primary/20 shadow-[0_0_15px_rgba(27,80,249,0.15)]' : 'bg-transparent text-neutral-500 hover:bg-white hover:border-neutral-200 border border-transparent hover:shadow-sm hover:text-brand-primary'}`} title="Settings">
+          <span class="i-lucide-settings w-5 h-5"></span>
+          <div class="absolute left-14 bg-neutral-900 text-white text-[10px] font-mono uppercase tracking-widest px-2 py-1 rounded opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity whitespace-nowrap">Settings</div>
+        </a>
+
+      </aside>
+
+      <!-- Page Content Slot -->
+      <main class="flex-1 overflow-y-auto bg-surface-base relative w-full">
+        <slot />
+      </main>
+
+    </div>
+
+    <!-- Auth Protection & Hydration -->
+    <script>
+      import { onAuthStateChanged } from "firebase/auth";
+      import { auth } from "../lib/firebase";
+      import { blobatar } from "blobatar";
+
+      // Mobile Menu Logic
+      const mobileToggle = document.getElementById('dashboard-mobile-toggle');
+      const sidebar = document.getElementById('dashboard-sidebar');
+      const overlay = document.getElementById('dashboard-mobile-overlay');
+
+      function toggleSidebar() {
+        if (!sidebar || !overlay) return;
+        
+        const isClosed = sidebar.classList.contains('-translate-x-full');
+        if (isClosed) {
+          sidebar.classList.remove('-translate-x-full');
+          overlay.classList.remove('hidden');
+          setTimeout(() => {
+            overlay.classList.remove('opacity-0');
+            overlay.classList.add('opacity-100');
+          }, 10);
+        } else {
+          sidebar.classList.add('-translate-x-full');
+          overlay.classList.remove('opacity-100');
+          overlay.classList.add('opacity-0');
+          setTimeout(() => {
+            overlay.classList.add('hidden');
+          }, 300);
+        }
+      }
+
+      mobileToggle?.addEventListener('click', toggleSidebar);
+      overlay?.addEventListener('click', toggleSidebar);
+
+      // Auth & Profile
+      onAuthStateChanged(auth, (user) => {
+        if (!user) {
+          window.location.href = "/login";
+          return;
+        }
+
+        // Hydrate profile info
+        const emailDisplay = document.getElementById('user-email-display');
+        const avatarDisplay = document.getElementById('user-avatar');
+
+        if (emailDisplay && user.email) {
+          emailDisplay.textContent = user.email.split('@')[0];
+        }
+
+        if (avatarDisplay && user.email) {
+          // Generate a unique blobatar based on user's email
+          avatarDisplay.innerHTML = blobatar(user.email);
+        }
+      });
+    </script>
+  </body>
+</html>

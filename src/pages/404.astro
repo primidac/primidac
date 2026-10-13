@@ -1,0 +1,29 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="404 — Not Found" description="The requested path was not located.">
+  <div class="min-h-[70vh] flex flex-col items-center justify-center relative px-6 text-center">
+    <div class="section-tag mb-4">
+      <span class="text-accent font-bold">// 404</span>
+      <span>ROUTE NOT FOUND</span>
+    </div>
+
+    <h1 class="h1-display text-4xl sm:text-6xl text-ink dark:text-dark-ink mb-4">
+      Resource Not Found
+    </h1>
+    
+    <p class="body-editorial text-neutral-600 dark:text-neutral-300 max-w-md mx-auto mb-8">
+      The requested route does not exist or has been relocated within the architecture.
+    </p>
+    
+    <div class="flex items-center gap-4">
+      <a href="/" class="btn-primary">
+        Return Home &rarr;
+      </a>
+      <a href="/#contact" class="link-underline font-mono text-xs uppercase tracking-wider">
+        Contact
+      </a>
+    </div>
+  </div>
+</Layout>
